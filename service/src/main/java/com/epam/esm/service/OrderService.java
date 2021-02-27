@@ -4,5 +4,5 @@ import com.epam.esm.dto.OrderDTO;
 
 public interface OrderService extends BaseService<OrderDTO> {
 
-    int create(OrderDTO newOrder);
+    long create(OrderDTO newOrder);
 }

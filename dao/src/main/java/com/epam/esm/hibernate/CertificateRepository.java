@@ -9,7 +9,7 @@ import java.util.List;
 public interface CertificateRepository extends Repository<GiftCertificateEntity> {
 
     @Transactional
-    int create(GiftCertificateEntity entity);
+    long create(GiftCertificateEntity entity);
 
     @Transactional
     void delete(long id);

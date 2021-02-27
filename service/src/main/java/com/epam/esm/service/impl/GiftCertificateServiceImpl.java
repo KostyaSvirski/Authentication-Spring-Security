@@ -3,10 +3,10 @@ package com.epam.esm.service.impl;
 import com.epam.esm.converter.GiftCertificateDTOToEntityConverter;
 import com.epam.esm.converter.GiftCertificateEntityToDTOConverter;
 import com.epam.esm.dto.GiftCertificateDTO;
-import com.epam.esm.exception.ServiceException;
+import com.epam.esm.exception.IncorrectDataException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.hibernate.CertificateRepository;
 import com.epam.esm.persistence.GiftCertificateEntity;
-import com.epam.esm.persistence.TagEntity;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.validator.PreparedValidatorChain;
 import com.epam.esm.validator.realisation.IntermediateCertificateLink;
@@ -16,7 +16,6 @@ import com.epam.esm.validator.realisation.sort.FieldValidatorLink;
 import com.epam.esm.validator.realisation.sort.MethodValidatorLink;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,13 +42,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public Optional<GiftCertificateDTO> find(long id) {
+    public GiftCertificateDTO find(long id) throws EntityNotFoundException {
         Optional<GiftCertificateEntity> certificateFromDao = repository.find(id);
-        return certificateFromDao.map(converterToDto);
+        if(!certificateFromDao.isPresent()) {
+            throw new EntityNotFoundException("certificate with id " + id + " not found");
+        }
+        return converterToDto.apply(certificateFromDao.get());
+
     }
 
     @Override
-    public int create(GiftCertificateDTO certificateDTO) {
+    public long create(GiftCertificateDTO certificateDTO) throws IncorrectDataException {
         PreparedValidatorChain<GiftCertificateDTO> chain = new IntermediateCertificateLink();
         chain.linkWith(new CertificateNameValidatorLink())
                 .linkWith(new DescriptionValidatorLink())
@@ -59,12 +62,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (chain.validate(certificateDTO)) {
             GiftCertificateEntity certificate = converterToEntity.apply(certificateDTO);
             return repository.create(certificate);
+        } else {
+            throw new IncorrectDataException("not valid data in certificate");
         }
-        return 0;
     }
 
     @Override
-    public boolean update(GiftCertificateDTO certificate, long id) throws ServiceException {
+    public boolean update(GiftCertificateDTO certificate, long id) throws EntityNotFoundException {
         PreparedValidatorChain<GiftCertificateDTO> chain = new CertificateNameValidatorLink();
         chain.linkWith(new DescriptionValidatorLink())
                 .linkWith(new DurationValidatorLink())
@@ -78,7 +82,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 repository.update(existing);
                 return true;
             } else {
-                throw new ServiceException("not found");
+                throw new EntityNotFoundException("not found");
             }
         }
         return false;
@@ -108,12 +112,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void delete(long id) throws ServiceException {
+    public void delete(long id) throws EntityNotFoundException {
         Optional<GiftCertificateEntity> certWrapper = repository.find(id);
         if (certWrapper.isPresent()) {
             repository.delete(id);
         } else {
-            throw new ServiceException("not found");
+            throw new EntityNotFoundException("not found");
         }
     }
 

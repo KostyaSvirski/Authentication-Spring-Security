@@ -4,7 +4,7 @@ import com.epam.esm.converter.OrderEntityToOrderDTOConverter;
 import com.epam.esm.converter.UserEntityToUserDTOConverter;
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.UserDTO;
-import com.epam.esm.exception.ServiceException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.hibernate.OrderRepository;
 import com.epam.esm.hibernate.UserRepository;
 import com.epam.esm.persistence.OrderEntity;
@@ -43,9 +43,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDTO> find(long id) {
+    public UserDTO find(long id) throws EntityNotFoundException {
         Optional<UserEntity> userFromDao = userRepository.find(id);
-        return userFromDao.map(toUserDTOConverter);
+        if(!userFromDao.isPresent()) {
+            throw new EntityNotFoundException("user with id " + id + " not found");
+        }
+        return toUserDTOConverter.apply(userFromDao.get());
     }
 
     @Override

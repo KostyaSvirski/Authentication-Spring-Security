@@ -1,15 +1,14 @@
 package com.epam.esm.service;
 
-import com.epam.esm.exception.ServiceException;
+import com.epam.esm.exception.EntityNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BaseService<T> {
 
     List<T> findAll(int limit, int page);
 
-    Optional<T> find(long id);
+    T find(long id) throws EntityNotFoundException;
 
 
 

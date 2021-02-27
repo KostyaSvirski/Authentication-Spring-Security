@@ -33,13 +33,13 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public int create(TagEntity entity) {
+    public long create(TagEntity entity) {
         if(entity.getCertificateEntitySet().stream().anyMatch(cert -> cert.getId() != 0)) {
             entity = em.merge(entity);
         } else {
             em.persist(entity);
         }
-        return (int) entity.getId();
+        return entity.getId();
     }
 
     @Override

@@ -44,9 +44,9 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public int create(OrderEntity newOrder) {
+    public long create(OrderEntity newOrder) {
         em.persist(newOrder);
-        return (int) newOrder.getId();
+        return newOrder.getId();
     }
 
     @Override

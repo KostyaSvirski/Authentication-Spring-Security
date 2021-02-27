@@ -7,7 +7,7 @@ import com.epam.esm.converter.OrderDTOToOrderEntityConverter;
 import com.epam.esm.converter.OrderEntityToOrderDTOConverter;
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.exception.DaoException;
-import com.epam.esm.exception.ServiceException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.persistence.OrderEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,7 +61,7 @@ class OrderServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1, 2, 3, 4})
-    public void testFindSpecificOrder(long id) throws DaoException, ServiceException {
+    public void testFindSpecificOrder(long id) throws DaoException, EntityNotFoundException {
         Mockito.when(repository.find(Mockito.eq(id)))
                 .thenReturn(Optional.of(new OrderEntity().builder().id(id).build()));
         Mockito.when(entityToDTOConverter.apply(Mockito.any())).thenReturn(new OrderDTO().builder().id(1).build());
@@ -70,7 +70,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    public void testFindNotExistingSpecificOrder() throws DaoException, ServiceException {
+    public void testFindNotExistingSpecificOrder() throws DaoException, EntityNotFoundException {
         Mockito.when(repository.find(Mockito.anyLong()))
                 .thenReturn(Optional.empty());
         Optional<OrderDTO> actual = service.find(0);
@@ -79,7 +79,7 @@ class OrderServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1, 2, 3, 4})
-    public void testCreation(long id) throws DaoException, ServiceException {
+    public void testCreation(long id) throws DaoException, EntityNotFoundException {
         OrderEntity order = new OrderEntity();
         order.setId(id);
         Mockito.when(dtoToEntityConverter.apply(Mockito.any())).thenReturn(order);

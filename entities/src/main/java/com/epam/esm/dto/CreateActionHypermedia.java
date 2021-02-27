@@ -4,13 +4,13 @@ import org.springframework.hateoas.RepresentationModel;
 
 public class CreateActionHypermedia extends RepresentationModel<CreateActionHypermedia> {
 
-    private final int id;
+    private final long id;
 
-    public CreateActionHypermedia(int id) {
+    public CreateActionHypermedia(long id) {
         this.id = id;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 }

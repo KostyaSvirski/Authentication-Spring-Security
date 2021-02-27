@@ -9,8 +9,6 @@ import com.epam.esm.converter.OrderEntityToOrderDTOConverter;
 import com.epam.esm.converter.UserEntityToUserDTOConverter;
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.UserDTO;
-import com.epam.esm.exception.DaoException;
-import com.epam.esm.exception.ServiceException;
 import com.epam.esm.persistence.OrderEntity;
 import com.epam.esm.persistence.UserEntity;
 import org.junit.jupiter.api.BeforeEach;

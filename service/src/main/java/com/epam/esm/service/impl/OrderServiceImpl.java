@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.converter.OrderDTOToOrderEntityConverter;
 import com.epam.esm.converter.OrderEntityToOrderDTOConverter;
 import com.epam.esm.dto.OrderDTO;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.hibernate.OrderRepository;
 import com.epam.esm.persistence.OrderEntity;
 import com.epam.esm.service.OrderService;
@@ -40,13 +41,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<OrderDTO> find(long id) {
+    public OrderDTO find(long id) throws EntityNotFoundException {
         Optional<OrderEntity> order = repository.find(id);
-        return order.map(toOrderDTOConverter);
+        if(!order.isPresent()) {
+            throw new EntityNotFoundException("order with id " + id + " not found");
+        }
+        return toOrderDTOConverter.apply(order.get());
     }
 
     @Override
-    public int create(OrderDTO newOrder) {
+    public long create(OrderDTO newOrder) {
         PreparedValidatorChain<OrderDTO> chain = new IntermediateOrderLink();
         chain.linkWith(new IdCertificateValidatorLink()).linkWith(new IdUserValidatorLink());
         if (chain.validate(newOrder)) {

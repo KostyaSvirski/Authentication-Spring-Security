@@ -17,4 +17,6 @@ public class CertificateLinkBuilder extends BuilderContainer<GiftCertificateDTO>
                 .withRel("certificate"));
         return this;
     }
+
+
 }

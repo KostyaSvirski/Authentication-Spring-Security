@@ -12,7 +12,7 @@ public interface OrderRepository extends Repository<OrderEntity> {
     List<OrderEntity> findOrderOfSpecificUser(long idUser, long idOrder);
 
     @Transactional
-    int create(OrderEntity newOrder);
+    long create(OrderEntity newOrder);
 
     List<OrderEntity> findOrdersOfSpecificUser(long idUser, int limit, int page);
 

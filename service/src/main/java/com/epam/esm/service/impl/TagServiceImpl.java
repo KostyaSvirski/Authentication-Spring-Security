@@ -3,7 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.converter.TagDTOToTagEntityConverter;
 import com.epam.esm.converter.TagEntityToTagDTOConverter;
 import com.epam.esm.dto.TagDTO;
-import com.epam.esm.exception.ServiceException;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.hibernate.TagRepository;
 import com.epam.esm.persistence.TagEntity;
 import com.epam.esm.service.TagService;
@@ -41,13 +41,16 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Optional<TagDTO> find(long id) {
+    public TagDTO find(long id) throws EntityNotFoundException {
         Optional<TagEntity> tagFromDao = tagRepository.find(id);
-        return tagFromDao.map(converterToDTO);
+        if(!tagFromDao.isPresent()) {
+            throw new EntityNotFoundException("tag with id " + id + " not found");
+        }
+        return converterToDTO.apply(tagFromDao.get());
     }
 
     @Override
-    public int create(TagDTO tagDTO) {
+    public long create(TagDTO tagDTO) {
         PreparedValidatorChain<TagDTO> validatorChain = new IntermediateTagLink();
         validatorChain.linkWith(new TagNameValidatorLink());
         if (validatorChain.validate(tagDTO)) {
@@ -57,12 +60,12 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void delete(long id) throws ServiceException {
+    public void delete(long id) throws EntityNotFoundException {
         Optional<TagEntity> tagWrapper = tagRepository.find(id);
         if (tagWrapper.isPresent()) {
             tagRepository.delete(id);
         } else {
-            throw new ServiceException("not found");
+            throw new EntityNotFoundException("not found");
         }
     }
 }

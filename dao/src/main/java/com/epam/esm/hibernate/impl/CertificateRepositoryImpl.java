@@ -44,13 +44,13 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 
 
     @Override
-    public int create(GiftCertificateEntity entity) {
+    public long create(GiftCertificateEntity entity) {
         if (entity.getTagsDependsOnCertificate().stream().anyMatch(tag -> tag.getId() != 0)) {
             entity = em.merge(entity);
         } else {
             em.persist(entity);
         }
-        return (int) entity.getId();
+        return entity.getId();
     }
 
     @Override
