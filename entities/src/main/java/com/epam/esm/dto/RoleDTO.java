@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import java.util.Set;
 
 @Component
 @EqualsAndHashCode(callSuper = true)
@@ -13,14 +13,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDTO extends RepresentationModel<UserDTO> {
+public class RoleDTO extends RepresentationModel<RoleDTO> {
 
     private long id;
-    private String name;
-    private String surname;
-    private String email;
-    private String password;
+    private String role;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @Autowired
-    private RoleDTO role;
-
+    private Set<UserDTO> users;
 }
