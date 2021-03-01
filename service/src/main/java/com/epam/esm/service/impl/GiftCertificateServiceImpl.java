@@ -59,12 +59,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .linkWith(new DurationValidatorLink())
                 .linkWith(new PriceValidatorLink())
                 .linkWith(new TagsValidatorLink());
-        if (chain.validate(certificateDTO)) {
-            GiftCertificateEntity certificate = converterToEntity.apply(certificateDTO);
-            return repository.create(certificate);
-        } else {
+        if (!chain.validate(certificateDTO)) {
             throw new IncorrectDataException("not valid data in certificate");
         }
+        return repository.create(converterToEntity.apply(certificateDTO));
     }
 
     @Override

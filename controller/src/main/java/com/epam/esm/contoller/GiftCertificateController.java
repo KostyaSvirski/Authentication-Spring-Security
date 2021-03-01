@@ -57,7 +57,8 @@ public class GiftCertificateController {
         }
         if (results == null || results.isEmpty()) {
             ActionHypermediaLinkBuilder builder = new ActionHypermediaLinkBuilder(new ActionHypermedia("not found"));
-            builder.buildRetrieveAllCertificateSelfLink(limit, page, partOfName, partOfDescription, nameOfTag, field, method);
+            builder.buildRetrieveAllCertificateSelfLink
+                    (limit, page, partOfName, partOfDescription, nameOfTag, field, method);
             return new ResponseEntity<>(builder.getHypermedia(), HttpStatus.NOT_FOUND);
         }
         for (int i = 0; i < results.size(); i++) {
@@ -70,8 +71,7 @@ public class GiftCertificateController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findSpecificCertificate(@PathVariable long id) {
-        GiftCertificateDTO result;
-        result = service.find(id);
+        GiftCertificateDTO result = service.find(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

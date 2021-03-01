@@ -12,7 +12,8 @@ import java.util.Optional;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    private final static String HQL_FIND_ALL = "from UserEntity order by id";
+    private final static String HQL_FIND_ALL = "from UserEntity user order by user.id";
+    private final static String HQL_SUFFIX_FIND_BY_EMAIL = " where user.email = ?1";
 
     @PersistenceContext
     private EntityManager em;
@@ -28,5 +29,18 @@ public class UserRepositoryImpl implements UserRepository {
                 .setFirstResult((page - 1) * limit)
                 .setMaxResults(limit)
                 .getResultList();
+    }
+
+    @Override
+    public long create(UserEntity newUser) {
+        em.persist(newUser);
+        return newUser.getId();
+    }
+
+    @Override
+    public Optional isUserExistWithEmail(String email) {
+        return em.createQuery("from UserEntity user where user.email =: email order by user.id ")
+                .setParameter("email", email).getResultList().stream().findAny();
+
     }
 }

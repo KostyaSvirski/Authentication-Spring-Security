@@ -1,6 +1,7 @@
 package com.epam.esm.handler;
 
 import com.epam.esm.dto.ActionHypermedia;
+import com.epam.esm.exception.EntityIsAlreadyExistException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectDataException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,12 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ActionHypermedia> handleException(IncorrectDataException e) {
         ActionHypermedia hypermedia = new ActionHypermedia(e.getMessage());
         return new ResponseEntity<>(hypermedia, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EntityIsAlreadyExistException.class)
+    public ResponseEntity<ActionHypermedia> handleException(EntityIsAlreadyExistException e) {
+        ActionHypermedia hypermedia = new ActionHypermedia(e.getMessage());
+        return new ResponseEntity<>(hypermedia, HttpStatus.CONFLICT);
     }
 
 

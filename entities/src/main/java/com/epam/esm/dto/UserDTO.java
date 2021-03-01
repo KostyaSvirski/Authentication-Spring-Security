@@ -20,6 +20,7 @@ public class UserDTO extends RepresentationModel<UserDTO> {
     private String surname;
     private String email;
     private String password;
+    private String passwordConfirm;
     @Autowired
     private RoleDTO role;
 
