@@ -11,5 +11,5 @@ public interface UserRepository extends Repository<UserEntity> {
 
     long create(UserEntity user);
 
-    Optional<UserEntity> isUserExistWithEmail(String email);
+    Optional<UserEntity> loadUserByUsername(String email);
 }

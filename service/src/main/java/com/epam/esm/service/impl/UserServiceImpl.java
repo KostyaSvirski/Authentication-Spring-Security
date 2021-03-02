@@ -21,6 +21,9 @@ import com.epam.esm.validator.realisation.user.PasswordValidatorLink;
 import com.epam.esm.validator.realisation.user.SurnameValidatorLink;
 import com.epam.esm.validator.realisation.user.UserNameValidatorLink;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +31,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
@@ -49,6 +52,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<UserEntity> userWrapper = userRepository.loadUserByUsername(username);
+        return toUserDTOConverter.apply(userWrapper
+                .orElseThrow(() -> new UsernameNotFoundException("user with email " + username + " not exist")
+        ));
+    }
+
+    @Override
     public List<UserDTO> findAll(int limit, int page) {
         List<UserEntity> listFromDao = userRepository.findAll(limit, page);
         return listFromDao.stream().map(toUserDTOConverter)
@@ -58,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO find(long id) throws EntityNotFoundException {
         Optional<UserEntity> userFromDao = userRepository.find(id);
-        if(!userFromDao.isPresent()) {
+        if (!userFromDao.isPresent()) {
             throw new EntityNotFoundException("user with id " + id + " not found");
         }
         return toUserDTOConverter.apply(userFromDao.get());
@@ -85,10 +96,10 @@ public class UserServiceImpl implements UserService {
         PreparedValidatorChain<UserDTO> chain = new IntermediateUserLink();
         chain.linkWith(new EmailValidatorLink()).linkWith(new PasswordValidatorLink())
                 .linkWith(new UserNameValidatorLink()).linkWith(new SurnameValidatorLink());
-        if(!chain.validate(newUser)) {
+        if (!chain.validate(newUser)) {
             throw new IncorrectDataException("not valid data in user");
         }
-        if(userRepository.isUserExistWithEmail(newUser.getEmail()).isPresent()) {
+        if (userRepository.loadUserByUsername(newUser.getUsername()).isPresent()) {
             throw new EntityIsAlreadyExistException("user with this email is already exist");
         }
         return userRepository.create(toUserEntityConverter.apply(newUser));

@@ -3,6 +3,7 @@ package com.epam.esm.dto;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -13,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RoleDTO extends RepresentationModel<RoleDTO> {
+public class RoleDTO extends RepresentationModel<RoleDTO> implements GrantedAuthority {
 
     private long id;
     private String role;
@@ -21,4 +22,9 @@ public class RoleDTO extends RepresentationModel<RoleDTO> {
     @ToString.Exclude
     @Autowired
     private Set<UserDTO> users;
+
+    @Override
+    public String getAuthority() {
+        return role;
+    }
 }

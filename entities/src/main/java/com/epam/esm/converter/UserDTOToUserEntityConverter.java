@@ -3,6 +3,7 @@ package com.epam.esm.converter;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.persistence.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
@@ -11,12 +12,14 @@ import java.util.function.Function;
 public class UserDTOToUserEntityConverter implements Function<UserDTO, UserEntity> {
 
     @Autowired
+    private BCryptPasswordEncoder encoder;
+    @Autowired
     private RoleDTOToRoleEntityConverter roleDTOToRoleEntityConverter;
 
     @Override
     public UserEntity apply(UserDTO userDTO) {
         return UserEntity.builder().name(userDTO.getName()).surname(userDTO.getSurname())
-                .email(userDTO.getEmail()).password(userDTO.getPassword())
+                .email(userDTO.getEmail()).password(encoder.encode(userDTO.getPassword()))
                 .role(roleDTOToRoleEntityConverter.apply(userDTO.getRole()))
                 .build();
     }

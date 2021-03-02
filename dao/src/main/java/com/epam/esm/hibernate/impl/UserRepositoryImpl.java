@@ -38,7 +38,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional isUserExistWithEmail(String email) {
+    public Optional loadUserByUsername(String email) {
         return em.createQuery("from UserEntity user where user.email =: email order by user.id ")
                 .setParameter("email", email).getResultList().stream().findAny();
 
