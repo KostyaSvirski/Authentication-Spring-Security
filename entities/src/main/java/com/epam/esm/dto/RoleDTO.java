@@ -1,7 +1,6 @@
 package com.epam.esm.dto;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,6 @@ public class RoleDTO extends RepresentationModel<RoleDTO> implements GrantedAuth
     private String role;
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @Autowired
     private Set<UserDTO> users;
 
     @Override

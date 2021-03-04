@@ -16,4 +16,7 @@ public interface UserService extends BaseService<UserDTO> {
     @Transactional
     long createUser(UserDTO newUser);
 
+    @Transactional
+    UserDTO findUserByLoginAndPassword(String login, String password);
+
 }

@@ -9,6 +9,7 @@ import com.epam.esm.dto.UserDTO;
 import com.epam.esm.exception.EntityIsAlreadyExistException;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectDataException;
+import com.epam.esm.exception.PasswordIncorrectException;
 import com.epam.esm.hibernate.OrderRepository;
 import com.epam.esm.hibernate.UserRepository;
 import com.epam.esm.persistence.OrderEntity;
@@ -22,8 +23,7 @@ import com.epam.esm.validator.realisation.user.SurnameValidatorLink;
 import com.epam.esm.validator.realisation.user.UserNameValidatorLink;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,32 +31,30 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
-    private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
-    private final UserEntityToUserDTOConverter toUserDTOConverter;
-    private final OrderEntityToOrderDTOConverter toOrderDTOConverter;
-    private final UserDTOToUserEntityConverter toUserEntityConverter;
+    private OrderRepository orderRepository;
+    private UserRepository userRepository;
+    private UserEntityToUserDTOConverter toUserDTOConverter;
+    private OrderEntityToOrderDTOConverter toOrderDTOConverter;
+    private UserDTOToUserEntityConverter toUserEntityConverter;
+    private AuthenticationUserService authenticationUserService;
+    private BCryptPasswordEncoder encoder;
 
     @Autowired
     public UserServiceImpl(OrderRepository orderRepository, UserRepository userRepository,
                            UserEntityToUserDTOConverter toUserDTOConverter,
                            OrderEntityToOrderDTOConverter toOrderDTOConverter,
-                           UserDTOToUserEntityConverter toUserEntityConverter) {
+                           UserDTOToUserEntityConverter toUserEntityConverter,
+                           AuthenticationUserService authenticationUserService,
+                           BCryptPasswordEncoder encoder) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.toUserDTOConverter = toUserDTOConverter;
         this.toOrderDTOConverter = toOrderDTOConverter;
         this.toUserEntityConverter = toUserEntityConverter;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserEntity> userWrapper = userRepository.loadUserByUsername(username);
-        return toUserDTOConverter.apply(userWrapper
-                .orElseThrow(() -> new UsernameNotFoundException("user with email " + username + " not exist")
-        ));
+        this.authenticationUserService = authenticationUserService;
+        this.encoder = encoder;
     }
 
     @Override
@@ -103,5 +101,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new EntityIsAlreadyExistException("user with this email is already exist");
         }
         return userRepository.create(toUserEntityConverter.apply(newUser));
+    }
+
+    @Override
+    public UserDTO findUserByLoginAndPassword(String login, String password) {
+        UserDetails user = authenticationUserService.loadUserByUsername(login);
+        if(!user.getPassword().equals(encoder.encode(password))) {
+            throw new PasswordIncorrectException("incorrect password");
+        }
+        return (UserDTO) user;
     }
 }

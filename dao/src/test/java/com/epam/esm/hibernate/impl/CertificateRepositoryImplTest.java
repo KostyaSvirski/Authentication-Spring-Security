@@ -1,21 +1,16 @@
 package com.epam.esm.hibernate.impl;
 
 import com.epam.esm.config.ConfigDB;
-import com.epam.esm.exception.DaoException;
 import com.epam.esm.hibernate.CertificateRepository;
-import com.epam.esm.hibernate.TagRepository;
 import com.epam.esm.persistence.GiftCertificateEntity;
 import com.epam.esm.persistence.TagEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.metrics.StartupStep;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,11 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(
@@ -67,7 +58,7 @@ class CertificateRepositoryImplTest {
         TagEntity tag = new TagEntity();
         tag.setName("tag");
         cert.addTag(tag);
-        int result = repository.create(cert);
+        long result = repository.create(cert);
         assertTrue(result > 0);
     }
 

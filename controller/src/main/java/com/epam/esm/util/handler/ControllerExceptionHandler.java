@@ -1,4 +1,4 @@
-package com.epam.esm.handler;
+package com.epam.esm.util.handler;
 
 import com.epam.esm.dto.ActionHypermedia;
 import com.epam.esm.exception.EntityIsAlreadyExistException;

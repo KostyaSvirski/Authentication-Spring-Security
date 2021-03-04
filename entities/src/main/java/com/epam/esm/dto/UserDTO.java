@@ -25,7 +25,6 @@ public class UserDTO extends RepresentationModel<UserDTO> implements UserDetails
     private String email;
     private String password;
     private String passwordConfirm;
-    @Autowired
     private RoleDTO role;
 
     @Override
