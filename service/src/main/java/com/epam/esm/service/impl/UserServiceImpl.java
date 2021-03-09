@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findUserByLoginAndPassword(String login, String password) {
         UserDetails user = authenticationUserService.loadUserByUsername(login);
-        if(!user.getPassword().equals(encoder.encode(password))) {
+        if(!encoder.matches(password, user.getPassword())) {
             throw new PasswordIncorrectException("incorrect password");
         }
         return (UserDTO) user;

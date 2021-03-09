@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RoleDTO extends RepresentationModel<RoleDTO> implements GrantedAuthority {
+public class RoleDTO implements GrantedAuthority {
 
     private long id;
     private String role;

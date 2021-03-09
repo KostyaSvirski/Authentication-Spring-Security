@@ -2,11 +2,16 @@ package com.epam.esm.contoller;
 
 import com.epam.esm.dto.CreateActionHypermedia;
 import com.epam.esm.dto.UserDTO;
+import com.epam.esm.dto.auth.AuthRequest;
+import com.epam.esm.dto.auth.AuthResponse;
 import com.epam.esm.util.jwt.JwtProvider;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +23,8 @@ public class AuthController {
     private UserService service;
     @Autowired
     private JwtProvider provider;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserDTO newUser) {
@@ -25,12 +32,13 @@ public class AuthController {
         return new ResponseEntity<>(new CreateActionHypermedia(result), HttpStatus.CREATED);
     }
 
-    @PostMapping("/auth")
-    public ResponseEntity<?> authenticate(@RequestBody UserDTO userToAuthenticate) {
-        UserDTO user = service.findUserByLoginAndPassword(userToAuthenticate.getEmail(),
-                userToAuthenticate.getPassword());
-        String token = provider.generateToken(user);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticate(@RequestBody AuthRequest request) {
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),
+                        request.getPassword()));
+        String token = provider.generateToken((UserDTO) authentication.getPrincipal());
+        return new ResponseEntity<>(new AuthResponse(token), HttpStatus.OK);
     }
 
 

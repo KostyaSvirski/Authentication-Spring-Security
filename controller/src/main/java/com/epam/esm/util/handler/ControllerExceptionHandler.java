@@ -6,6 +6,7 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -36,5 +37,10 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(hypermedia, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(AuthenticationServiceException.class)
+    public ResponseEntity<ActionHypermedia> handleException(AuthenticationServiceException e) {
+        ActionHypermedia hypermedia = new ActionHypermedia(e.getMessage());
+        return new ResponseEntity<>(hypermedia, HttpStatus.UNAUTHORIZED);
+    }
 
 }
