@@ -1,5 +1,6 @@
 package com.epam.esm.util.builder;
 
+import com.epam.esm.contoller.OrderController;
 import com.epam.esm.contoller.UserController;
 import com.epam.esm.dto.UserDTO;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -19,20 +20,10 @@ public class UserLinkBuilder extends BuilderContainer<UserDTO> {
 
     public UserLinkBuilder buildOrdersReferencesLink(int limit, int page) {
         hypermedia.add(WebMvcLinkBuilder
-                .linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-                        .retrieveOrdersOfSpecificUser(limit, page, hypermedia.getId()))
+                .linkTo(WebMvcLinkBuilder.methodOn(OrderController.class)
+                        .retrieveOrders(limit, page, hypermedia.getId(), 0))
                 .withRel("orders"));
         return this;
     }
-
-    public UserLinkBuilder buildOrderLink(long idOrder) {
-        hypermedia.add(WebMvcLinkBuilder
-                .linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-                        .retrieveOrderOfSpecificUser(idOrder, hypermedia.getId()))
-                .withRel("order"));
-        return this;
-    }
-
-
 
 }

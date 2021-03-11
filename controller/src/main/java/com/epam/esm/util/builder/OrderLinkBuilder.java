@@ -36,12 +36,4 @@ public class OrderLinkBuilder extends BuilderContainer<OrderDTO> {
         return this;
     }
 
-    public OrderLinkBuilder buildRetrieveOrderOfSpecificUserLink(long id) {
-        hypermedia.add(WebMvcLinkBuilder
-                .linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-                        .retrieveOrderOfSpecificUser(id, hypermedia.getId()))
-                .withRel("order"));
-        return this;
-    }
-
 }

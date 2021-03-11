@@ -15,8 +15,9 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     private static final String HQL_FIND_ALL = "select o from OrderEntity o order by o.id";
     private static final String SUFFIX_FOR_ONE_ORDER = " and o.id =: idOrder";
-    private static final String HQL_FIND_ORDERS_OF_USER = "from OrderEntity o" +
-            " where o.idUser =: idUser";
+    private static final String HQL_FIND_ORDERS_OF_USER = "from OrderEntity o where o.idUser =: idUser";
+    private static final String ID_USER = "idUser";
+    private static final String ID_ORDER = "idOrder";
 
     @PersistenceContext
     private EntityManager em;
@@ -38,8 +39,8 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<OrderEntity> findOrderOfSpecificUser(long idUser, long idOrder) {
         Query query = em.createQuery(HQL_FIND_ORDERS_OF_USER + SUFFIX_FOR_ONE_ORDER);
-        query.setParameter("idUser", idUser);
-        query.setParameter("idOrder", idOrder);
+        query.setParameter(ID_USER, idUser);
+        query.setParameter(ID_ORDER, idOrder);
         return query.getResultList();
     }
 
@@ -52,7 +53,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<OrderEntity> findOrdersOfSpecificUser(long idUser, int limit, int page) {
         Query query = em.createQuery(HQL_FIND_ORDERS_OF_USER);
-        query.setParameter("idUser", idUser);
+        query.setParameter(ID_USER, idUser);
         return query.setFirstResult((page - 1) * limit)
                 .setMaxResults(limit)
                 .getResultList();

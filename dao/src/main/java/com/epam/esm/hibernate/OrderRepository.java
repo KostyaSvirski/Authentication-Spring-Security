@@ -1,7 +1,6 @@
 package com.epam.esm.hibernate;
 
 import com.epam.esm.Repository;
-import com.epam.esm.exception.DaoException;
 import com.epam.esm.persistence.OrderEntity;
 import org.springframework.transaction.annotation.Transactional;
 

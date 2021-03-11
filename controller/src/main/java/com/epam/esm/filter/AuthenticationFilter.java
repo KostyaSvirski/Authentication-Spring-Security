@@ -2,6 +2,8 @@ package com.epam.esm.filter;
 
 import com.epam.esm.util.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -26,24 +28,30 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
+@PropertySource("classpath:/controller.properties")
 public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private final static String AUTHORIZATION_KEY = "Authorization";
     private static final String PREFIX_BEARER = "Bearer ";
+    private static final String patternCertificates = "/certificates/**";
+    private static final String patternTags = "/tags/**";
+    private static final String patternUsers = "/users/**";
+    private static final String patternOrders = "/orders/**";
 
     @Autowired
     private JwtProvider jwtProvider;
 
     public AuthenticationFilter() {
         super(new OrRequestMatcher(
-                new AntPathRequestMatcher("/certificates/**", HttpMethod.POST.name()),
-                new AntPathRequestMatcher("/certificates/**", HttpMethod.DELETE.name()),
-                new AntPathRequestMatcher("/certificates/**", HttpMethod.PATCH.name()),
-                new AntPathRequestMatcher("/tags/**", HttpMethod.POST.name()),
-                new AntPathRequestMatcher("/tags/**", HttpMethod.DELETE.name()),
-                new AntPathRequestMatcher("/users/**", HttpMethod.GET.name()),
-                new AntPathRequestMatcher("/orders/**", HttpMethod.POST.name()),
-                new AntPathRequestMatcher("/orders/**", HttpMethod.GET.name())));
+                new AntPathRequestMatcher(patternCertificates, HttpMethod.POST.name()),
+                new AntPathRequestMatcher(patternCertificates, HttpMethod.DELETE.name()),
+                new AntPathRequestMatcher(patternCertificates, HttpMethod.PATCH.name()),
+                new AntPathRequestMatcher(patternTags, HttpMethod.POST.name()),
+                new AntPathRequestMatcher(patternTags, HttpMethod.DELETE.name()),
+                new AntPathRequestMatcher(patternUsers, HttpMethod.GET.name()),
+                new AntPathRequestMatcher(patternOrders, HttpMethod.POST.name()),
+                new AntPathRequestMatcher(patternOrders, HttpMethod.GET.name())));
+
         setContinueChainBeforeSuccessfulAuthentication(true);
     }
 

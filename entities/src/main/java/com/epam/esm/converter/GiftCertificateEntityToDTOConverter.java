@@ -1,7 +1,6 @@
 package com.epam.esm.converter;
 
 import com.epam.esm.dto.GiftCertificateDTO;
-import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.persistence.GiftCertificateEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

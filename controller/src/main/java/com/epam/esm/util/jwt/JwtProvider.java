@@ -19,12 +19,13 @@ import java.util.stream.Collectors;
 public class JwtProvider {
 
     private static final String SECRET = "secret";
+    private static final int EXPIRATION_DAYS = 1;
     private static final String AUTHORITIES = "authorities";
     private static final String ID = "id";
     private static final String DELIMITER = ",";
 
     public String generateToken(UserDTO user) {
-        Instant expiration = Instant.now().plus(Duration.ofDays(1));
+        Instant expiration = Instant.now().plus(Duration.ofDays(EXPIRATION_DAYS));
         Map<String, Object> claims = new HashMap<>();
         claims.put(AUTHORITIES, user.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(DELIMITER)));

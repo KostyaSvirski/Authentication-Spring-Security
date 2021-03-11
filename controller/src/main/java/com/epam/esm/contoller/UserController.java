@@ -1,8 +1,11 @@
 package com.epam.esm.contoller;
 
+import com.epam.esm.auth.UserPrincipal;
+import com.epam.esm.config.SecurityConfig;
 import com.epam.esm.dto.ActionHypermedia;
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.UserDTO;
+import com.epam.esm.exception.UnknownPrincipalException;
 import com.epam.esm.service.UserService;
 import com.epam.esm.util.builder.ActionHypermediaLinkBuilder;
 import com.epam.esm.util.builder.OrderLinkBuilder;
@@ -10,6 +13,7 @@ import com.epam.esm.util.builder.UserLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,37 +55,13 @@ public class UserController {
         return new ResponseEntity<>(builder.getHypermedia(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/orders")
-    public ResponseEntity<?> retrieveOrdersOfSpecificUser
-            (@RequestParam(defaultValue = "5") int limit,
-             @RequestParam(defaultValue = "1") int page,
-             @PathVariable long id) {
-        List<OrderDTO> resultList = service.findOrdersOfUser(id, limit, page);
-        for (int i = 0; i < resultList.size(); i++) {
-            OrderLinkBuilder builder = new OrderLinkBuilder(resultList.get(i));
-            builder.buildRetrieveOrderOfSpecificUserLink(id);
-            resultList.set(i, builder.getHypermedia());
-        }
-        return new ResponseEntity<>(resultList, HttpStatus.OK);
-    }
-
-    @GetMapping("{idUser}/orders/{idOrder}")
-    public ResponseEntity<?> retrieveOrderOfSpecificUser
-            (@PathVariable long idUser, @PathVariable long idOrder) {
-
-        Optional<OrderDTO> order = service.findSpecificOrderOfUser(idUser, idOrder);
-        if (order.isPresent()) {
-            OrderLinkBuilder builder = new OrderLinkBuilder(order.get());
-            builder.buildUserReferenceLink().buildCertificateReferenceLink();
-            return new ResponseEntity<>(builder.getHypermedia(), HttpStatus.OK);
+    @GetMapping("/me")
+    public ResponseEntity<?> retrieveMe() {
+        Object me = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(me instanceof UserPrincipal) {
+            return retrieveSpecificUser(((UserPrincipal) me).getId());
         } else {
-            ActionHypermedia actionHypermedia = new ActionHypermedia
-                    ("not found with id of user" + idUser + "and id of order");
-            ActionHypermediaLinkBuilder builder = new ActionHypermediaLinkBuilder(actionHypermedia);
-            builder.buildRetrieveOrderOfSpecificUserSelfLink(idUser, idOrder)
-                    .buildRetrieveSpecificUserLink(idUser);
-            return new ResponseEntity<>(builder.getHypermedia(), HttpStatus.NOT_FOUND);
+            throw new UnknownPrincipalException("principal of " + me.getClass() + " is unknown");
         }
-
     }
 }

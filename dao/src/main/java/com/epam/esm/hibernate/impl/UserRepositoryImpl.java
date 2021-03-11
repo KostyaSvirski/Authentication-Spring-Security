@@ -13,7 +13,9 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     private final static String HQL_FIND_ALL = "from UserEntity user order by user.id";
-    private final static String HQL_SUFFIX_FIND_BY_EMAIL = " where user.email = ?1";
+    private final static String HQL_LOAD_BY_NAME =
+            "from UserEntity user where user.email =: email order by user.id";
+    private final static String EMAIL = "email";
 
     @PersistenceContext
     private EntityManager em;
@@ -39,8 +41,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional loadUserByUsername(String email) {
-        return em.createQuery("from UserEntity user where user.email =: email order by user.id ")
-                .setParameter("email", email).getResultList().stream().findAny();
+        return em.createQuery(HQL_LOAD_BY_NAME)
+                .setParameter(EMAIL, email).getResultList().stream().findAny();
 
     }
 }

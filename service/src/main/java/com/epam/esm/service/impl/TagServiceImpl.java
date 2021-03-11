@@ -43,7 +43,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDTO find(long id) throws EntityNotFoundException {
         Optional<TagEntity> tagFromDao = tagRepository.find(id);
-        if(!tagFromDao.isPresent()) {
+        if (!tagFromDao.isPresent()) {
             throw new EntityNotFoundException("tag with id " + id + " not found");
         }
         return converterToDTO.apply(tagFromDao.get());

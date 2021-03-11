@@ -4,8 +4,10 @@ import com.epam.esm.filter.AuthenticationFilter;
 import com.epam.esm.service.impl.AuthenticationUserService;
 import com.epam.esm.util.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -58,13 +60,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/signin", "/signup", "/certificates/**", "/tags/**").permitAll()
-                .antMatchers("/users/{^[\\d]$}").authenticated()
-                .antMatchers("/orders/{^[\\d]$}").authenticated()
-                .antMatchers(HttpMethod.POST, "/certificates/**").hasRole(ROLE_ADMIN)
-                .antMatchers(HttpMethod.POST, "/tags/**").hasRole(ROLE_ADMIN)
-                .antMatchers("/users/**").hasRole(ROLE_ADMIN)
-                .antMatchers("/orders/**").hasRole(ROLE_ADMIN)
+                .antMatchers("/signin", "/signup").permitAll()
+                .antMatchers("/users/me", "/orders/my").authenticated()
+                .antMatchers(HttpMethod.POST, "/orders/").authenticated()
+                .antMatchers(HttpMethod.GET,  "/certificates/**", "/tags/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/certificates/**", "/tags/**").hasRole(ROLE_ADMIN)
+                .antMatchers("/users/**", "/orders/**").hasRole(ROLE_ADMIN)
                 .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers(HttpMethod.DELETE).hasRole(ROLE_ADMIN)
                 .antMatchers(HttpMethod.PATCH).hasRole(ROLE_ADMIN)

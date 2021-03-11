@@ -87,7 +87,7 @@ class UserServiceImplTest {
         assertEquals(Optional.empty(), actual);
     }
 
-    @ParameterizedTest
+   /* @ParameterizedTest
     @ValueSource(longs = {1, 2, 3, 4})
     public void testFindOrdersOfUser(long id) {
         OrderDTO dto = new OrderDTO();
@@ -108,6 +108,6 @@ class UserServiceImplTest {
         Mockito.when(toOrderDTOConverter.apply(Mockito.any())).thenReturn(new OrderDTO());
         Optional<OrderDTO> actual = service.findSpecificOrderOfUser(Mockito.anyLong(), Mockito.anyLong());
         assertEquals(Optional.of(new OrderDTO()), actual);
-    }
+    }*/
 
 }

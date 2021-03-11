@@ -2,7 +2,6 @@ package com.epam.esm.hibernate;
 
 import com.epam.esm.Repository;
 import com.epam.esm.persistence.UserEntity;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 

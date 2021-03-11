@@ -4,7 +4,6 @@ import com.epam.esm.hibernate.CertificateRepository;
 import com.epam.esm.persistence.GiftCertificateEntity;
 import com.epam.esm.persistence.TagEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,9 +21,6 @@ public class CertificateRepositoryImpl implements CertificateRepository {
     private static final String HQL_ORDER_BY_CREATE_DATE = "order by cert.createDate ";
     private static final String HQL_CONDITION_DESCRIPTION = "where cert.description = ?1 ";
     private static final String HQL_CONDITION_NAME = "where cert.name = ?1 ";
-/*    private static final String HQL_RETRIEVE_ALL_BY_TAG_NAME = "select distinct cert from GiftCertificateEntity cert" +
-            " join cert.tagsDependsOnCertificate tag" +
-            " where tag.name =: aaa";*/
 
     @PersistenceContext
     private EntityManager em;
@@ -104,9 +100,6 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 
     @Override
     public List<GiftCertificateEntity> searchByTag(String nameOfTag, int limit, int page) {
-       /* Query query = em.createQuery(HQL_RETRIEVE_ALL_BY_TAG_NAME);
-        query.setParameter("aaa", nameOfTag);
-        return query.setFirstResult(limit * (page - 1)).setMaxResults(limit).getResultList();*/
         return null;
     }
 }

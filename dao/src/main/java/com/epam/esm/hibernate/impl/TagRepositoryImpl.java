@@ -34,7 +34,7 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public long create(TagEntity entity) {
-        if(entity.getCertificateEntitySet().stream().anyMatch(cert -> cert.getId() != 0)) {
+        if (entity.getCertificateEntitySet().stream().anyMatch(cert -> cert.getId() != 0)) {
             entity = em.merge(entity);
         } else {
             em.persist(entity);

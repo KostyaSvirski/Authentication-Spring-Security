@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO find(long id) throws EntityNotFoundException {
         Optional<OrderEntity> order = repository.find(id);
-        if(!order.isPresent()) {
+        if (!order.isPresent()) {
             throw new EntityNotFoundException("order with id " + id + " not found");
         }
         return toOrderDTOConverter.apply(order.get());
@@ -57,5 +57,20 @@ public class OrderServiceImpl implements OrderService {
             return repository.create(toOrderEntityConverter.apply(newOrder));
         }
         return 0;
+    }
+
+    @Override
+    public List<OrderDTO> findOrdersOfUser(long idUser, int limit, int page) {
+        List<OrderEntity> listFromDao = repository.findOrdersOfSpecificUser(idUser, limit, page);
+        return listFromDao.stream().map(toOrderDTOConverter)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderDTO findSpecificOrderOfUser(long idUser, long idOrder) {
+        List<OrderEntity> listFromDao = repository.findOrderOfSpecificUser(idUser, idOrder);
+        return listFromDao.stream().map(toOrderDTOConverter)
+                .findFirst().orElseThrow(() ->
+                        new EntityNotFoundException("order with id " + idOrder + " of user " + idUser + " not found"));
     }
 }

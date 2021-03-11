@@ -3,8 +3,8 @@ package com.epam.esm.service.impl;
 import com.epam.esm.converter.GiftCertificateDTOToEntityConverter;
 import com.epam.esm.converter.GiftCertificateEntityToDTOConverter;
 import com.epam.esm.dto.GiftCertificateDTO;
-import com.epam.esm.exception.IncorrectDataException;
 import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.exception.IncorrectDataException;
 import com.epam.esm.hibernate.CertificateRepository;
 import com.epam.esm.persistence.GiftCertificateEntity;
 import com.epam.esm.service.GiftCertificateService;
@@ -17,7 +17,11 @@ import com.epam.esm.validator.realisation.sort.MethodValidatorLink;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +48,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateDTO find(long id) throws EntityNotFoundException {
         Optional<GiftCertificateEntity> certificateFromDao = repository.find(id);
-        if(!certificateFromDao.isPresent()) {
+        if (!certificateFromDao.isPresent()) {
             throw new EntityNotFoundException("certificate with id " + id + " not found");
         }
         return converterToDto.apply(certificateFromDao.get());
@@ -66,7 +70,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public boolean update(GiftCertificateDTO certificate, long id) throws EntityNotFoundException {
+    public void update(GiftCertificateDTO certificate, long id) throws EntityNotFoundException {
         PreparedValidatorChain<GiftCertificateDTO> chain = new CertificateNameValidatorLink();
         chain.linkWith(new DescriptionValidatorLink())
                 .linkWith(new DurationValidatorLink())
@@ -76,17 +80,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             Optional<GiftCertificateEntity> existingWrapper = repository.find(id);
             if (existingWrapper.isPresent()) {
                 GiftCertificateEntity existing = existingWrapper.get();
-                existing =  prepareDataForUpdate(certificateForUpdate, existing);
+                prepareDataForUpdate(certificateForUpdate, existing);
                 repository.update(existing);
-                return true;
             } else {
                 throw new EntityNotFoundException("not found");
             }
         }
-        return false;
     }
 
-    private GiftCertificateEntity prepareDataForUpdate
+    private void prepareDataForUpdate
             (GiftCertificateEntity incomming, GiftCertificateEntity existing) {
         if (incomming.getName() != null) {
             existing.setName(incomming.getName());
@@ -106,7 +108,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (incomming.getTagsDependsOnCertificate() != null) {
             existing.setTagsDependsOnCertificate(incomming.getTagsDependsOnCertificate());
         }
-        return existing;
     }
 
     @Override
