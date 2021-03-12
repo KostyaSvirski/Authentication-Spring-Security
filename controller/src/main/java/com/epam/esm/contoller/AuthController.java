@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 public class AuthController {
+
+    private static final String AUTHORIZATION_HEADER = "Authorization";
 
     @Autowired
     private UserService service;
@@ -34,14 +38,15 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> signin(@RequestBody AuthRequest request, HttpServletResponse response) {
         if(request.getUsername() == null || request.getPassword() == null) {
-            throw new NotValidDataForAuthenticateException("username or password didn't matched in request");
+            throw new NotValidDataForAuthenticateException("username or password didn't match in request");
         }
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),
                         request.getPassword()));
         String token = provider.generateToken((UserDTO) authentication.getPrincipal());
+        response.setHeader(AUTHORIZATION_HEADER, token);
         return new ResponseEntity<>(new AuthResponse(token), HttpStatus.OK);
     }
 

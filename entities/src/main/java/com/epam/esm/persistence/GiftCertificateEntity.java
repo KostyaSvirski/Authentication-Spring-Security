@@ -1,8 +1,23 @@
 package com.epam.esm.persistence;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -29,7 +44,6 @@ public class GiftCertificateEntity {
     private LocalDate createDate;
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
-
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {CascadeType.PERSIST,
                     CascadeType.DETACH,
@@ -54,7 +68,9 @@ public class GiftCertificateEntity {
 
     public void removeTag(TagEntity tag) {
         tagsDependsOnCertificate.remove(tag);
-        tag.getCertificateEntitySet().remove(this);
+        if(tag.getCertificateEntitySet().contains(this)) {
+            tag.removeCertificate(this);
+        }
     }
 
 }

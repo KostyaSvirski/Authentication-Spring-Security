@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -35,13 +34,13 @@ public class OrderController {
     @GetMapping("/")
     public ResponseEntity<?> retrieveOrders(@RequestParam(defaultValue = DEFAULT_LIMIT) int limit,
                                             @RequestParam(defaultValue = DEFAULT_PAGE) int page,
-                                            @RequestParam(required = false) long idUser ,
-                                            @RequestParam(required = false) long idOrder) {
+                                            @RequestParam(required = false) Long idUser,
+                                            @RequestParam(required = false) Long idOrder) {
         List<OrderDTO> resultList;
-        if(idOrder != 0 && idUser != 0) {
+        if (idOrder != null && idUser != null) {
             return retrieveOrderOfUser(idOrder, idUser);
         }
-        if (idUser != 0) {
+        if (idUser != null) {
             resultList = service.findOrdersOfUser(idUser, limit, page);
         } else {
             resultList = service.findAll(limit, page);
@@ -64,7 +63,6 @@ public class OrderController {
 
     @PostMapping("/")
     public ResponseEntity<?> createNewOrder(@RequestBody OrderDTO order) {
-        order.setPurchaseTime(LocalDateTime.now().toString());
         long result = service.create(order);
         CreateHypermediaLinkBuilder builder = new CreateHypermediaLinkBuilder(new CreateActionHypermedia(result));
         builder.buildNewOrderLink(result);
@@ -74,13 +72,13 @@ public class OrderController {
     @GetMapping("/my")
     public ResponseEntity<?> retrieveMyOrders(@RequestParam(defaultValue = DEFAULT_LIMIT) int limit,
                                               @RequestParam(defaultValue = DEFAULT_PAGE) int page,
-                                              @RequestParam(required = false) long idOrder) {
+                                              @RequestParam(required = false) Long idOrder) {
         Object me = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (me instanceof UserPrincipal) {
-            if(idOrder!= 0) {
+            if (idOrder != null) {
                 return retrieveOrderOfUser(idOrder, ((UserPrincipal) me).getId());
             }
-            return retrieveOrders(limit, page, ((UserPrincipal) me).getId(), 0);
+            return retrieveOrders(limit, page, ((UserPrincipal) me).getId(), 0L);
         } else {
             throw new UnknownPrincipalException("principal of " + me.getClass() + " is unknown");
         }

@@ -1,14 +1,9 @@
 package com.epam.esm.contoller;
 
 import com.epam.esm.auth.UserPrincipal;
-import com.epam.esm.config.SecurityConfig;
-import com.epam.esm.dto.ActionHypermedia;
-import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.exception.UnknownPrincipalException;
 import com.epam.esm.service.UserService;
-import com.epam.esm.util.builder.ActionHypermediaLinkBuilder;
-import com.epam.esm.util.builder.OrderLinkBuilder;
 import com.epam.esm.util.builder.UserLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -58,7 +52,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<?> retrieveMe() {
         Object me = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(me instanceof UserPrincipal) {
+        if (me instanceof UserPrincipal) {
             return retrieveSpecificUser(((UserPrincipal) me).getId());
         } else {
             throw new UnknownPrincipalException("principal of " + me.getClass() + " is unknown");

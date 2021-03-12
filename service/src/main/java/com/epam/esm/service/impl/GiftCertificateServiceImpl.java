@@ -17,11 +17,9 @@ import com.epam.esm.validator.realisation.sort.MethodValidatorLink;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +55,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public long create(GiftCertificateDTO certificateDTO) throws IncorrectDataException {
+        certificateDTO.setCreateDate(LocalDate.now().toString());
+        certificateDTO.setLastUpdateDate(LocalDateTime.now().toString());
         PreparedValidatorChain<GiftCertificateDTO> chain = new IntermediateCertificateLink();
         chain.linkWith(new CertificateNameValidatorLink())
                 .linkWith(new DescriptionValidatorLink())
@@ -71,6 +71,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public void update(GiftCertificateDTO certificate, long id) throws EntityNotFoundException {
+        certificate.setLastUpdateDate(LocalDateTime.now().toString());
         PreparedValidatorChain<GiftCertificateDTO> chain = new CertificateNameValidatorLink();
         chain.linkWith(new DescriptionValidatorLink())
                 .linkWith(new DurationValidatorLink())
@@ -132,7 +133,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificateDTO> findByTag(String nameOfTag, int limit, int page) {
-        return createResultList(repository.searchByTag(nameOfTag, limit, page));
+        List<GiftCertificateEntity> listOfEntities = repository.searchByTag(nameOfTag, limit, page);
+        if(listOfEntities.isEmpty()) {
+            throw new EntityNotFoundException("certificates with tag name: " + nameOfTag + " - not found");
+        } else {
+            return createResultList(listOfEntities);
+        }
     }
 
     @Override

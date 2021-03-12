@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class CertificateRepositoryImpl implements CertificateRepository {
@@ -21,6 +20,8 @@ public class CertificateRepositoryImpl implements CertificateRepository {
     private static final String HQL_ORDER_BY_CREATE_DATE = "order by cert.createDate ";
     private static final String HQL_CONDITION_DESCRIPTION = "where cert.description = ?1 ";
     private static final String HQL_CONDITION_NAME = "where cert.name = ?1 ";
+    private static final String HQL_RETRIEVE_TAG_BY_NAME = "from TagEntity as tag where tag.name =: nameOfTag";
+    private static final String HQL_PARAMETER_NAME_TAG = "nameOfTag";
 
     @PersistenceContext
     private EntityManager em;
@@ -52,9 +53,16 @@ public class CertificateRepositoryImpl implements CertificateRepository {
     @Override
     public void delete(long id) {
         GiftCertificateEntity cert = em.find(GiftCertificateEntity.class, id);
-        Set<TagEntity> tagEntities = cert.getTagsDependsOnCertificate();
+        Set<TagEntity> tagEntities = createConcurrentSet(cert.getTagsDependsOnCertificate());
         tagEntities.forEach(tagEntity -> tagEntity.removeCertificate(cert));
         em.remove(cert);
+    }
+
+    private Set<TagEntity> createConcurrentSet(Set<TagEntity> tagsDependsOnCertificate) {
+        ConcurrentHashMap<TagEntity, Boolean> map = new ConcurrentHashMap<>();
+        Set<TagEntity> tagEntitySetConcurrent = Collections.newSetFromMap(map);
+        tagEntitySetConcurrent.addAll(tagsDependsOnCertificate);
+        return tagEntitySetConcurrent;
     }
 
     @Override
@@ -100,6 +108,13 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 
     @Override
     public List<GiftCertificateEntity> searchByTag(String nameOfTag, int limit, int page) {
-        return null;
+        Optional<TagEntity> tag = em.createQuery(HQL_RETRIEVE_TAG_BY_NAME)
+                .setParameter(HQL_PARAMETER_NAME_TAG, nameOfTag)
+                .getResultList().stream().findFirst();
+        if(tag.isPresent()) {
+            return new ArrayList<>(tag.get().getCertificateEntitySet());
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

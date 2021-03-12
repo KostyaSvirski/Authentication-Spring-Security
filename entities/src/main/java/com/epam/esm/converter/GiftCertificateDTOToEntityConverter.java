@@ -25,7 +25,8 @@ public class GiftCertificateDTOToEntityConverter implements Function<GiftCertifi
                 .description(certificateDTO.getDescription())
                 .duration(certificateDTO.getDuration())
                 .price(certificateDTO.getPrice())
-                .tagsDependsOnCertificate(certificateDTO.getTags().stream()
-                        .map(tag -> tagDTOToTagEntityConverter.apply(tag)).collect(Collectors.toSet())).build();
+                .tagsDependsOnCertificate(certificateDTO.getTags() != null ?
+                        certificateDTO.getTags().stream()
+                        .map(tag -> tagDTOToTagEntityConverter.apply(tag)).collect(Collectors.toSet()) : null).build();
     }
 }

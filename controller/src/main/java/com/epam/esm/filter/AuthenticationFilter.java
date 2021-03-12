@@ -57,7 +57,7 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException, IOException, ServletException {
+            throws AuthenticationException {
         String token = request.getHeader(AUTHORIZATION_KEY);
         if (token != null && token.startsWith(PREFIX_BEARER)) {
             token = token.substring(PREFIX_BEARER.length());

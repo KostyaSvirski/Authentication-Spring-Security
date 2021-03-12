@@ -21,7 +21,7 @@ public class UserLinkBuilder extends BuilderContainer<UserDTO> {
     public UserLinkBuilder buildOrdersReferencesLink(int limit, int page) {
         hypermedia.add(WebMvcLinkBuilder
                 .linkTo(WebMvcLinkBuilder.methodOn(OrderController.class)
-                        .retrieveOrders(limit, page, hypermedia.getId(), 0))
+                        .retrieveOrders(limit, page, hypermedia.getId(), 0L))
                 .withRel("orders"));
         return this;
     }

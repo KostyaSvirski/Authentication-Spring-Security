@@ -1,9 +1,11 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.auth.UserPrincipal;
 import com.epam.esm.converter.OrderDTOToOrderEntityConverter;
 import com.epam.esm.converter.OrderEntityToOrderDTOConverter;
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.exception.UnknownPrincipalException;
 import com.epam.esm.hibernate.OrderRepository;
 import com.epam.esm.persistence.OrderEntity;
 import com.epam.esm.service.OrderService;
@@ -12,8 +14,10 @@ import com.epam.esm.validator.realisation.IntermediateOrderLink;
 import com.epam.esm.validator.realisation.order.IdCertificateValidatorLink;
 import com.epam.esm.validator.realisation.order.IdUserValidatorLink;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,10 +55,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public long create(OrderDTO newOrder) {
-        PreparedValidatorChain<OrderDTO> chain = new IntermediateOrderLink();
-        chain.linkWith(new IdCertificateValidatorLink()).linkWith(new IdUserValidatorLink());
-        if (chain.validate(newOrder)) {
-            return repository.create(toOrderEntityConverter.apply(newOrder));
+        Object me = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (me instanceof UserPrincipal) {
+            newOrder.setIdUser(((UserPrincipal) me).getId());
+            newOrder.setPurchaseTime(LocalDateTime.now().toString());
+            PreparedValidatorChain<OrderDTO> chain = new IntermediateOrderLink();
+            chain.linkWith(new IdCertificateValidatorLink()).linkWith(new IdUserValidatorLink());
+            if (chain.validate(newOrder)) {
+                return repository.create(toOrderEntityConverter.apply(newOrder));
+            }
+        } else {
+            throw new UnknownPrincipalException("principal of " + me.getClass() + " is unknown");
         }
         return 0;
     }

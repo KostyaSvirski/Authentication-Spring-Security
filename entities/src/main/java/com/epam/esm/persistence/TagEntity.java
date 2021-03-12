@@ -1,6 +1,11 @@
 package com.epam.esm.persistence;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,7 +50,9 @@ public class TagEntity {
 
     public void removeCertificate(GiftCertificateEntity cert) {
         certificateEntitySet.remove(cert);
-        cert.getTagsDependsOnCertificate().remove(this);
+        if(cert.getTagsDependsOnCertificate().contains(this)) {
+            cert.removeTag(this);
+        }
     }
 
 }

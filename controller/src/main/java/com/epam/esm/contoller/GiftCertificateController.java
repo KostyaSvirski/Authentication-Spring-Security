@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -42,7 +40,7 @@ public class GiftCertificateController {
              @RequestParam(required = false) String partOfDescription,
              @RequestParam(required = false) String nameOfTag,
              @RequestParam(required = false) String field,
-             @RequestParam(required = false) String method) {
+             @RequestParam(required = false) String direction) {
         List<GiftCertificateDTO> results;
         if (partOfName != null) {
             results = service.findByPartOfName(partOfName, limit, page);
@@ -50,15 +48,15 @@ public class GiftCertificateController {
             results = service.findByPartOfDescription(partOfDescription, limit, page);
         } else if (nameOfTag != null) {
             results = service.findByTag(nameOfTag, limit, page);
-        } else if (field != null && method != null) {
-            results = service.sortByField(field, method, limit, page);
+        } else if (field != null && direction != null) {
+            results = service.sortByField(field, direction, limit, page);
         } else {
             results = service.findAll(limit, page);
         }
         if (results == null || results.isEmpty()) {
             ActionHypermediaLinkBuilder builder = new ActionHypermediaLinkBuilder(new ActionHypermedia("not found"));
             builder.buildRetrieveAllCertificateSelfLink
-                    (limit, page, partOfName, partOfDescription, nameOfTag, field, method);
+                    (limit, page, partOfName, partOfDescription, nameOfTag, field, direction);
             return new ResponseEntity<>(builder.getHypermedia(), HttpStatus.NOT_FOUND);
         }
         for (int i = 0; i < results.size(); i++) {
@@ -77,8 +75,6 @@ public class GiftCertificateController {
 
     @PostMapping("/")
     public ResponseEntity<?> createNewCertificate(@RequestBody GiftCertificateDTO certificateDTO) {
-        certificateDTO.setCreateDate(LocalDate.now().toString());
-        certificateDTO.setLastUpdateDate(LocalDateTime.now().toString());
         long result = service.create(certificateDTO);
         CreateHypermediaLinkBuilder builder = new CreateHypermediaLinkBuilder(new CreateActionHypermedia(result));
         builder.buildNewCertificateLink(result);
@@ -94,7 +90,6 @@ public class GiftCertificateController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateCertificate(@RequestBody GiftCertificateDTO certificate, @PathVariable long id) {
-        certificate.setLastUpdateDate(LocalDateTime.now().toString());
         service.update(certificate, id);
         ActionHypermediaLinkBuilder builder = new ActionHypermediaLinkBuilder
                 (new ActionHypermedia("updated with id" + id));
