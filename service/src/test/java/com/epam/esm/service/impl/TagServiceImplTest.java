@@ -52,8 +52,8 @@ class TagServiceImplTest {
     public void testCreate(long id) {
         TagDTO tag = new TagDTO(id, "gg");
         Mockito.when(converterToEntity.apply(tag)).thenReturn(new TagEntity().builder().id(id).build());
-        Mockito.when(repository.create(Mockito.any())).thenReturn((int) id);
-        int actual = service.create(tag);
+        Mockito.when(repository.create(Mockito.any())).thenReturn(id);
+        long actual = service.create(tag);
         assertEquals(id, actual);
     }
 
@@ -79,14 +79,14 @@ class TagServiceImplTest {
         Mockito.when(repository.find(Mockito.eq(id)))
                 .thenReturn(Optional.of(new TagEntity().builder().id(id).build()));
         Mockito.when(converterToDTO.apply(Mockito.any())).thenReturn(new TagDTO().builder().id(id).build());
-        Optional<TagDTO> actual = service.find(id);
+        Optional<TagDTO> actual = Optional.ofNullable(service.find(id));
         assertEquals(Optional.of(new TagDTO().builder().id(id).build()), actual);
     }
 
     @Test
     public void testFindSpecificTagNotFound() {
         Mockito.when(repository.find(Mockito.anyLong())).thenReturn(Optional.empty());
-        Optional<TagDTO> actual = service.find(Mockito.anyLong());
+        Optional<TagDTO> actual = Optional.ofNullable(service.find(Mockito.anyLong()));
         assertEquals(Optional.empty(), actual);
     }
 

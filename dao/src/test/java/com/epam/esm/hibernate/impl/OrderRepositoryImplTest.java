@@ -45,7 +45,7 @@ class OrderRepositoryImplTest {
         order.setIdCertificate(1);
         order.setCost(100);
         order.setClosed(false);
-        int result = repository.create(order);
+        long result = repository.create(order);
         assertTrue(result > 0);
     }
 
@@ -56,7 +56,7 @@ class OrderRepositoryImplTest {
         order.setIdCertificate(1);
         order.setCost(100);
         order.setClosed(false);
-        int result = repository.create(order);
+        long result = repository.create(order);
         Optional<OrderEntity> entity = repository.find(result);
         assertTrue(entity.isPresent());
         assertEquals(result, entity.get().getId());
@@ -100,7 +100,7 @@ class OrderRepositoryImplTest {
         order.setIdCertificate((long) (Math.random() * 10 + 1));
         order.setCost((long) (Math.random() * 50 + 50));
         order.setClosed(false);
-        int idNewOrder = repository.create(order);
+        long idNewOrder = repository.create(order);
         List<OrderEntity> orders = repository.findOrderOfSpecificUser(expectedIdUser, idNewOrder);
         assertNotNull(orders);
         assertNotNull(orders.get(0));

@@ -65,7 +65,7 @@ class OrderServiceImplTest {
         Mockito.when(repository.find(Mockito.eq(id)))
                 .thenReturn(Optional.of(new OrderEntity().builder().id(id).build()));
         Mockito.when(entityToDTOConverter.apply(Mockito.any())).thenReturn(new OrderDTO().builder().id(1).build());
-        Optional<OrderDTO> actual = service.find(id);
+        Optional<OrderDTO> actual = Optional.ofNullable(service.find(id));
         assertEquals(Optional.of(new OrderDTO().builder().id(1).build()), actual);
     }
 
@@ -73,7 +73,7 @@ class OrderServiceImplTest {
     public void testFindNotExistingSpecificOrder() throws DaoException, EntityNotFoundException {
         Mockito.when(repository.find(Mockito.anyLong()))
                 .thenReturn(Optional.empty());
-        Optional<OrderDTO> actual = service.find(0);
+        Optional<OrderDTO> actual = Optional.ofNullable(service.find(0));
         assertEquals(Optional.empty(), actual);
     }
 
@@ -83,8 +83,8 @@ class OrderServiceImplTest {
         OrderEntity order = new OrderEntity();
         order.setId(id);
         Mockito.when(dtoToEntityConverter.apply(Mockito.any())).thenReturn(order);
-        Mockito.when(repository.create(Mockito.any())).thenReturn((int) id);
-        int actual = service.create(new OrderDTO().builder().id(id).idCertificate(1).idUser(1).build());
+        Mockito.when(repository.create(Mockito.any())).thenReturn(id);
+        long actual = service.create(new OrderDTO().builder().id(id).idCertificate(1).idUser(1).build());
         assertEquals(id, actual);
     }
 }

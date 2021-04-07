@@ -76,14 +76,14 @@ class UserServiceImplTest {
         Mockito.when(userRepository.find(Mockito.eq(id)))
                 .thenReturn(Optional.of(new UserEntity().builder().id(id).build()));
         Mockito.when(toUserDTOConverter.apply(Mockito.any())).thenReturn(new UserDTO().builder().id(1).build());
-        Optional<UserDTO> actual = service.find(id);
+        Optional<UserDTO> actual = Optional.ofNullable(service.find(id));
         assertEquals(Optional.of(new UserDTO().builder().id(1).build()), actual);
     }
 
     @Test
     public void testFindSpecificUserNotFound() {
         Mockito.when(userRepository.find(Mockito.anyLong())).thenReturn(Optional.empty());
-        Optional<UserDTO> actual = service.find(Mockito.anyLong());
+        Optional<UserDTO> actual = Optional.ofNullable(service.find(Mockito.anyLong()));
         assertEquals(Optional.empty(), actual);
     }
 

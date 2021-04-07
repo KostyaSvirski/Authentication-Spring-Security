@@ -77,7 +77,7 @@ class CertificateRepositoryImplTest {
         TagEntity tagSec = new TagEntity();
         tagSec.setName("tag sec");
         cert.addTag(tagSec);
-        int result = repository.create(cert);
+        long result = repository.create(cert);
         assertTrue(result > 0);
         GiftCertificateEntity certFromRepo = repository.find(result).get();
         assertEquals(2, certFromRepo.getTagsDependsOnCertificate().size());
@@ -95,7 +95,7 @@ class CertificateRepositoryImplTest {
         TagEntity tag = new TagEntity();
         tag.setName("tag");
         cert.addTag(tag);
-        int result = repository.create(cert);
+        long result = repository.create(cert);
         assertTrue(result > 0);
         GiftCertificateEntity certSec = new GiftCertificateEntity();
         certSec.setName("nameSec");
@@ -108,7 +108,7 @@ class CertificateRepositoryImplTest {
         tagSec.setName("tag");
         tagSec.setId(1);
         certSec.addTag(tagSec);
-        int resultSec = repository.create(certSec);
+        long resultSec = repository.create(certSec);
         assertTrue(resultSec > 0);
         GiftCertificateEntity certFromRepo = repository.find(result).get();
         assertEquals(1, certFromRepo.getTagsDependsOnCertificate().stream().findAny().get()
@@ -127,7 +127,7 @@ class CertificateRepositoryImplTest {
         TagEntity tag = new TagEntity();
         tag.setName("tag");
         cert.addTag(tag);
-        int result = repository.create(cert);
+        long result = repository.create(cert);
         cert = repository.find(result).get();
         assertTrue(result > 0);
         cert.setName("new name");
@@ -170,7 +170,7 @@ class CertificateRepositoryImplTest {
         TagEntity tag = new TagEntity();
         tag.setName("tag");
         cert.addTag(tag);
-        int id = repository.create(cert);
+        long id = repository.create(cert);
         assertTrue(id > 0);
         Optional<GiftCertificateEntity> certFromDaoAfterCreate = repository.find(id);
         assertTrue(certFromDaoAfterCreate.isPresent());

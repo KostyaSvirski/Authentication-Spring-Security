@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-
+    id "org.sonarqube" version "3.1.1"
 }
 
 version 'unspecified'
@@ -15,6 +15,7 @@ dependencies {
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.21.Final'
     implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.21.Final'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.9.RELEASE'
+    implementation group: 'org.sonarsource.scanner.gradle', name: 'sonarqube-gradle-plugin', version: '3.1.1'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -24,4 +25,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+sonarqube {
+    properties {
+        property "sonar.login", "de2de76be9f0ad48341d5f59be48ef4193d8f4b4"
+    }
 }

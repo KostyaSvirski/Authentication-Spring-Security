@@ -48,7 +48,8 @@ public class GiftCertificateEntity {
             cascade = {CascadeType.PERSIST,
                     CascadeType.DETACH,
                     CascadeType.REFRESH,
-                    CascadeType.REMOVE})
+                    CascadeType.REMOVE,
+                    CascadeType.MERGE})
     @JoinTable(
             name = "junction_gift_certificates_and_tags",
             joinColumns = {@JoinColumn(name = "id_certificate")},

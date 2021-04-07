@@ -54,7 +54,7 @@ class TagRepositoryImplTest {
         cert.setPrice(1000);
         cert.setLastUpdateDate(LocalDateTime.now());
         tag.addCertificate(cert);
-        int newTagId = repository.create(tag);
+        long newTagId = repository.create(tag);
         assertTrue(newTagId > 0);
     }
 
@@ -78,7 +78,7 @@ class TagRepositoryImplTest {
         certSec.setPrice(1500);
         certSec.setLastUpdateDate(LocalDateTime.now());
         tag.addCertificate(certSec);
-        int id = repository.create(tag);
+        long id = repository.create(tag);
         assertTrue( id > 0);
         TagEntity tagFromRepo = repository.find(id).get();
         assertEquals(2, tagFromRepo.getCertificateEntitySet().size());
