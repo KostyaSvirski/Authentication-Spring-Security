@@ -1,13 +1,8 @@
 package com.epam.esm.util.builder;
 
 import com.epam.esm.contoller.GiftCertificateController;
-import com.epam.esm.contoller.OrderController;
 import com.epam.esm.contoller.TagController;
-import com.epam.esm.contoller.UserController;
 import com.epam.esm.dto.ActionHypermedia;
-import com.epam.esm.dto.GiftCertificateDTO;
-import com.epam.esm.dto.OrderDTO;
-import com.epam.esm.dto.TagDTO;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 public class ActionHypermediaLinkBuilder extends BuilderContainer<ActionHypermedia> {
@@ -34,7 +29,6 @@ public class ActionHypermediaLinkBuilder extends BuilderContainer<ActionHypermed
                 .withRel("certificate"));
         return this;
     }
-
 
 
     public ActionHypermediaLinkBuilder buildFindAllTagsLink(int limit, int page) {

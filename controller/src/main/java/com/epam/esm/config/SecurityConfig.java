@@ -5,8 +5,6 @@ import com.epam.esm.service.impl.AuthenticationUserService;
 import com.epam.esm.util.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -62,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/signin", "/signup").permitAll()
                 .antMatchers("/users/me").authenticated()
-                .antMatchers(HttpMethod.GET,  "/certificates/**", "/tags/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/certificates/**", "/tags/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/certificates/**", "/tags/**").hasRole(ROLE_ADMIN)
                 .antMatchers("/users/**").hasRole(ROLE_ADMIN)
                 .antMatchers("/orders/**").authenticated()

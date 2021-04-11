@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    private final static String HQL_FIND_ALL = "from UserEntity user order by user.id";
-    private final static String HQL_LOAD_BY_NAME =
+    private static final String HQL_FIND_ALL = "from UserEntity user order by user.id";
+    private static final String HQL_LOAD_BY_NAME =
             "from UserEntity user where user.email =: email order by user.id";
-    private final static String EMAIL = "email";
+    private static final String EMAIL = "email";
 
     @PersistenceContext
     private EntityManager em;

@@ -7,10 +7,10 @@ public class IntermediateUserLink extends PreparedValidatorChain<UserDTO> {
 
     @Override
     public boolean validate(UserDTO bean) {
-        if(bean.getEmail() == null || bean.getPassword() == null || bean.getPasswordConfirm() == null) {
+        if (bean.getEmail() == null || bean.getPassword() == null || bean.getPasswordConfirm() == null) {
             return false;
         }
-        if(!bean.getPasswordConfirm().equals(bean.getPassword())) {
+        if (!bean.getPasswordConfirm().equals(bean.getPassword())) {
             return false;
         }
         return checkNextLink(bean);

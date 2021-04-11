@@ -47,7 +47,7 @@ class CertificateRepositoryImplTest {
     }
 
     @Test
-    public void testCreate() {
+    void testCreate() {
         GiftCertificateEntity cert = new GiftCertificateEntity();
         cert.setName("name");
         cert.setDescription("descr");
@@ -63,7 +63,7 @@ class CertificateRepositoryImplTest {
     }
 
     @Test
-    public void testCreateCertWithSomeTags() {
+    void testCreateCertWithSomeTags() {
         GiftCertificateEntity cert = new GiftCertificateEntity();
         cert.setName("name");
         cert.setDescription("descr");
@@ -84,7 +84,7 @@ class CertificateRepositoryImplTest {
     }
 
     @Test
-    public void testCreateTwoCertWithSimilarTags() {
+    void testCreateTwoCertWithSimilarTags() {
         GiftCertificateEntity cert = new GiftCertificateEntity();
         cert.setName("name");
         cert.setDescription("descr");
@@ -116,7 +116,7 @@ class CertificateRepositoryImplTest {
     }
 
     @Test
-    public void testUpdateCert() {
+    void testUpdateCert() {
         GiftCertificateEntity cert = new GiftCertificateEntity();
         cert.setName("name");
         cert.setDescription("descr");
@@ -142,7 +142,7 @@ class CertificateRepositoryImplTest {
     }
 
     @Test
-    public void testFindSpecificCert() {
+    void testFindSpecificCert() {
         Optional<GiftCertificateEntity> cert = repository.find(2);
         assertTrue(cert.isPresent());
         Set<TagEntity> tagsDependsOnCert = cert.get().getTagsDependsOnCertificate();
@@ -159,7 +159,7 @@ class CertificateRepositoryImplTest {
     }
 
     @Test
-    public void testDeleteCert() {
+    void testDeleteCert() {
         GiftCertificateEntity cert = new GiftCertificateEntity();
         cert.setName("name");
         cert.setDescription("descr");
@@ -187,7 +187,7 @@ class CertificateRepositoryImplTest {
     }
 
     @Test
-    public void testRetrieveSortedByNameCertsAsc() {
+    void testRetrieveSortedByNameCertsAsc() {
         List<GiftCertificateEntity> entities = repository
                 .sortCertificatesByName("asc", 10, 1);
         assertEquals(10, entities.size());
@@ -195,7 +195,7 @@ class CertificateRepositoryImplTest {
     }
 
     @Test
-    public void testRetrieveSortedByNameCertsDesc() {
+    void testRetrieveSortedByNameCertsDesc() {
         List<GiftCertificateEntity> entities = repository
                 .sortCertificatesByName("desc", 10, 1);
         assertEquals(10, entities.size());
@@ -203,29 +203,29 @@ class CertificateRepositoryImplTest {
     }
 
     @Test
-    public void testRetrieveSortedByNameCertsException() {
+    void testRetrieveSortedByNameCertsException() {
         assertThrows(RuntimeException.class, () -> repository
                 .sortCertificatesByName("awef", 10, 1));
     }
 
     @Test
-    public void testRetrieveSortedByDateCertsAsc() {
+    void testRetrieveSortedByDateCertsAsc() {
         List<GiftCertificateEntity> entities = repository
                 .sortCertificatesByCreateDate("asc", 10, 1);
         assertEquals(10, entities.size());
-        assertTrue(entities.get(0).getCreateDate().compareTo(entities.get(entities.size() - 1).getCreateDate()) == 0);
+        assertEquals(entities.get(0).getCreateDate().compareTo(entities.get(entities.size() - 1).getCreateDate()), 0);
     }
 
     @Test
-    public void testRetrieveSortedByDateCertsDesc() {
+    void testRetrieveSortedByDateCertsDesc() {
         List<GiftCertificateEntity> entities = repository
                 .sortCertificatesByCreateDate("desc", 10, 1);
         assertEquals(10, entities.size());
-        assertTrue(entities.get(0).getCreateDate().compareTo(entities.get(entities.size() - 1).getCreateDate()) == 0);
+        assertEquals(entities.get(0).getCreateDate().compareTo(entities.get(entities.size() - 1).getCreateDate()), 0);
     }
 
     @Test
-    public void testRetrieveSortedByDateCertsException() {
+    void testRetrieveSortedByDateCertsException() {
         assertThrows(IllegalArgumentException.class, () -> repository
                 .sortCertificatesByCreateDate("awef", 10, 1));
     }

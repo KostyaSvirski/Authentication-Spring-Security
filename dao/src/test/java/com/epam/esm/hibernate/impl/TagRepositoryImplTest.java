@@ -1,7 +1,6 @@
 package com.epam.esm.hibernate.impl;
 
 import com.epam.esm.config.ConfigDB;
-import com.epam.esm.exception.DaoException;
 import com.epam.esm.hibernate.TagRepository;
 import com.epam.esm.persistence.GiftCertificateEntity;
 import com.epam.esm.persistence.TagEntity;
@@ -43,7 +42,7 @@ class TagRepositoryImplTest {
     }
 
     @Test
-    public void testCreateTag() {
+    void testCreateTag() {
         TagEntity tag = new TagEntity();
         tag.setName("name");
         GiftCertificateEntity cert = new GiftCertificateEntity();
@@ -59,7 +58,7 @@ class TagRepositoryImplTest {
     }
 
     @Test
-    public void testCreateTwoTags() {
+    void testCreateTwoTags() {
         TagEntity tag = new TagEntity();
         tag.setName("name");
         GiftCertificateEntity cert = new GiftCertificateEntity();
@@ -79,13 +78,13 @@ class TagRepositoryImplTest {
         certSec.setLastUpdateDate(LocalDateTime.now());
         tag.addCertificate(certSec);
         long id = repository.create(tag);
-        assertTrue( id > 0);
+        assertTrue(id > 0);
         TagEntity tagFromRepo = repository.find(id).get();
         assertEquals(2, tagFromRepo.getCertificateEntitySet().size());
     }
 
     @Test
-    public void testDeleteTag() {
+    void testDeleteTag() {
         repository.delete(100);
         Optional<TagEntity> result = repository.find(100);
         assertFalse(result.isPresent());
@@ -93,7 +92,7 @@ class TagRepositoryImplTest {
 
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5})
-    public void testFindAllByPage(int page) {
+    void testFindAllByPage(int page) {
         List<TagEntity> result = repository.findAll(10, page);
         assertNotNull(result);
         assertEquals((page - 1) * 10L + 1, result.get(0).getId());
@@ -102,7 +101,7 @@ class TagRepositoryImplTest {
 
     @ParameterizedTest
     @ValueSource(ints = {3, 4, 5, 6, 7})
-    public void testFindAllByLimit(int limit) {
+    void testFindAllByLimit(int limit) {
         List<TagEntity> result = repository.findAll(limit, 1);
         assertNotNull(result);
         assertEquals(1, result.get(0).getId());
@@ -111,7 +110,7 @@ class TagRepositoryImplTest {
 
 
     @Test
-    public void testFindSpecificTag() {
+    void testFindSpecificTag() {
         Optional<TagEntity> result = repository.find(2);
         assertTrue(result.isPresent());
         assertEquals(2, result.get().getId());

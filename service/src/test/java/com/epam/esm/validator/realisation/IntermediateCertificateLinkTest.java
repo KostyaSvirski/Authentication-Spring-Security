@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class IntermediateCertificateLinkTest {
 
@@ -21,14 +22,14 @@ class IntermediateCertificateLinkTest {
             new GiftCertificateDTO("name", 100, 12, null)};
 
     @Test
-    public void testValidation() {
+    void testValidation() {
         for (GiftCertificateDTO param : paramsToCheck) {
             assertTrue(validator.validate(param));
         }
     }
 
     @Test
-    public void testValidationIncParams() {
+    void testValidationIncParams() {
         for (GiftCertificateDTO param : incParamsToCheck) {
             assertFalse(validator.validate(param));
         }

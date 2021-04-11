@@ -1,7 +1,6 @@
 package com.epam.esm.converter;
 
 import com.epam.esm.dto.TagDTO;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.persistence.TagEntity;
 import org.springframework.stereotype.Component;
 

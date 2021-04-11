@@ -46,7 +46,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         Mockito.when(userRepository.findAll(Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(Collections.singletonList(new UserEntity().builder().id(1).build()));
         Mockito.when(toUserDTOConverter.apply(Mockito.any())).thenReturn(new UserDTO().builder().id(1).build());
@@ -55,7 +55,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testFindAllException() {
+    void testFindAllException() {
         Mockito.when(userRepository.findAll(Mockito.anyInt(), Mockito.anyInt())).thenThrow(new RuntimeException());
         assertThrows(RuntimeException.class,
                 () -> service.findAll(Mockito.anyInt(), Mockito.anyInt()));
@@ -63,7 +63,7 @@ class UserServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1, 2, 3, 4})
-    public void testFindSpecificUser(long id) {
+    void testFindSpecificUser(long id) {
         Mockito.when(userRepository.find(Mockito.eq(id)))
                 .thenReturn(Optional.of(new UserEntity().builder().id(id).build()));
         Mockito.when(toUserDTOConverter.apply(Mockito.any())).thenReturn(new UserDTO().builder().id(1).build());
@@ -72,7 +72,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testFindSpecificUserNotFound() {
+    void testFindSpecificUserNotFound() {
         Mockito.when(userRepository.find(Mockito.anyLong())).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> service.find(Mockito.anyLong()));
     }

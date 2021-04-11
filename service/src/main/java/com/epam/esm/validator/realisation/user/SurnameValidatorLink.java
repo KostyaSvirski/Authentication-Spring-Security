@@ -12,10 +12,10 @@ public class SurnameValidatorLink extends IntermediateUserLink {
 
     @Override
     public boolean validate(UserDTO bean) {
-        if(bean.getSurname() != null) {
+        if (bean.getSurname() != null) {
             Pattern pattern = Pattern.compile(REG_EXP_NAME);
             Matcher matcher = pattern.matcher(bean.getSurname());
-            if(!matcher.matches()) {
+            if (!matcher.matches()) {
                 return false;
             }
         }

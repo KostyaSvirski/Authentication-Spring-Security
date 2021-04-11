@@ -14,7 +14,7 @@ public class PasswordValidatorLink extends IntermediateUserLink {
     public boolean validate(UserDTO bean) {
         Pattern pattern = Pattern.compile(REGEXP_PASSWORD);
         Matcher matcher = pattern.matcher(bean.getPassword());
-        if(!matcher.matches()) {
+        if (!matcher.matches()) {
             return false;
         }
         return checkNextLink(bean);

@@ -8,7 +8,11 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
@@ -20,7 +24,7 @@ public class CertificateRepositoryImpl implements CertificateRepository {
     private static final String HQL_ORDER_BY_CREATE_DATE = "order by cert.createDate ";
     private static final String HQL_CONDITION_DESCRIPTION = "where cert.description = ?1 ";
     private static final String HQL_CONDITION_NAME = "where cert.name = ?1 ";
-    private static final String HQL_RETRIEVE_TAG_BY_NAME = "from TagEntity as tag where tag.name =: nameOfTag";
+    private static final String HQL_RETRIEVE_TAG_BY_NAME = "from TagEntity tag where tag.name =: nameOfTag";
     private static final String HQL_PARAMETER_NAME_TAG = "nameOfTag";
 
     @PersistenceContext
@@ -111,7 +115,7 @@ public class CertificateRepositoryImpl implements CertificateRepository {
         Optional<TagEntity> tag = em.createQuery(HQL_RETRIEVE_TAG_BY_NAME)
                 .setParameter(HQL_PARAMETER_NAME_TAG, nameOfTag)
                 .getResultList().stream().findFirst();
-        if(tag.isPresent()) {
+        if (tag.isPresent()) {
             return new ArrayList<>(tag.get().getCertificateEntitySet());
         } else {
             return Collections.emptyList();

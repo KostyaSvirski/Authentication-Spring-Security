@@ -12,7 +12,7 @@ public abstract class PreparedValidatorChain<T> {
     public abstract boolean validate(T bean);
 
     protected boolean checkNextLink(T bean) {
-        if(nextLink == null) {
+        if (nextLink == null) {
             return true;
         }
         return nextLink.validate(bean);

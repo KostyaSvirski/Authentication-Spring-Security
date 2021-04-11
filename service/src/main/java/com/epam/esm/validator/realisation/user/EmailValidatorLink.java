@@ -14,7 +14,7 @@ public class EmailValidatorLink extends IntermediateUserLink {
     public boolean validate(UserDTO bean) {
         Pattern pattern = Pattern.compile(REGEXP_EMAIL);
         Matcher matcher = pattern.matcher(bean.getEmail());
-        if(!matcher.matches()) {
+        if (!matcher.matches()) {
             return false;
         }
         return checkNextLink(bean);

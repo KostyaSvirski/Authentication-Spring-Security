@@ -3,7 +3,8 @@ package com.epam.esm.validator.realisation.certificate;
 import com.epam.esm.dto.GiftCertificateDTO;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DurationValidatorLinkTest {
 
@@ -12,8 +13,8 @@ class DurationValidatorLinkTest {
     private int[] incParamsToCheck = {-1};
 
     @Test
-    public void testValidation() {
-        for(int param : paramsToCheck) {
+    void testValidation() {
+        for (int param : paramsToCheck) {
             GiftCertificateDTO certificate = new GiftCertificateDTO();
             certificate.setDuration(param);
             assertTrue(validator.validate(certificate));
@@ -21,8 +22,8 @@ class DurationValidatorLinkTest {
     }
 
     @Test
-    public void testValidationIncParams() {
-        for(int param : incParamsToCheck) {
+    void testValidationIncParams() {
+        for (int param : incParamsToCheck) {
             GiftCertificateDTO certificate = new GiftCertificateDTO();
             certificate.setDuration(param);
             assertFalse(validator.validate(certificate));

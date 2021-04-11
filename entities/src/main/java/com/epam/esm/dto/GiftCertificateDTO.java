@@ -3,11 +3,8 @@ package com.epam.esm.dto;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -28,7 +25,7 @@ public class GiftCertificateDTO extends RepresentationModel<GiftCertificateDTO> 
     @Autowired
     private Set<TagDTO> tags;
 
-    public <E> GiftCertificateDTO(String name, long price, int duration, HashSet<E> tags) {
+    public <E> GiftCertificateDTO(String name, long price, int duration, Set<E> tags) {
         this.name = name;
         this.duration = duration;
         this.price = price;

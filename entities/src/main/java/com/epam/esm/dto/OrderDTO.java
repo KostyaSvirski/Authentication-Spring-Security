@@ -4,8 +4,6 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 @Component
 @EqualsAndHashCode(callSuper = true)
 @Data

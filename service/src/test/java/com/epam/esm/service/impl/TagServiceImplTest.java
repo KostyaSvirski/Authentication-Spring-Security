@@ -1,12 +1,12 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.hibernate.TagRepository;
-import com.epam.esm.hibernate.impl.TagRepositoryImpl;
 import com.epam.esm.config.ServiceConfig;
 import com.epam.esm.converter.TagDTOToTagEntityConverter;
 import com.epam.esm.converter.TagEntityToTagDTOConverter;
 import com.epam.esm.dto.TagDTO;
+import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.hibernate.TagRepository;
+import com.epam.esm.hibernate.impl.TagRepositoryImpl;
 import com.epam.esm.persistence.TagEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,9 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -52,7 +49,7 @@ class TagServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1, 2, 3, 4})
-    public void testCreate(long id) {
+    void testCreate(long id) {
         TagDTO tag = new TagDTO(id, "gg");
         Mockito.when(converterToEntity.apply(tag)).thenReturn(new TagEntity().builder().id(id).build());
         Mockito.when(repository.create(Mockito.any())).thenReturn(id);
@@ -61,7 +58,7 @@ class TagServiceImplTest {
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         Mockito.when(repository.findAll(Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(Collections.singletonList(new TagEntity().builder().id(1).build()));
         Mockito.when(converterToDTO.apply(Mockito.any())).thenReturn(new TagDTO());
@@ -70,7 +67,7 @@ class TagServiceImplTest {
     }
 
     @Test
-    public void testFindAllException() {
+    void testFindAllException() {
         Mockito.when(repository.findAll(Mockito.anyInt(), Mockito.anyInt())).thenThrow(new RuntimeException());
         assertThrows(Throwable.class,
                 () -> service.findAll(Mockito.anyInt(), Mockito.anyInt()));
@@ -78,7 +75,7 @@ class TagServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1, 2, 3, 4})
-    public void testFindSpecificTag(long id) {
+    void testFindSpecificTag(long id) {
         Mockito.when(repository.find(Mockito.eq(id)))
                 .thenReturn(Optional.of(new TagEntity().builder().id(id).build()));
         Mockito.when(converterToDTO.apply(Mockito.any())).thenReturn(new TagDTO().builder().id(id).build());
@@ -87,7 +84,7 @@ class TagServiceImplTest {
     }
 
     @Test
-    public void testFindSpecificTagNotFound() {
+    void testFindSpecificTagNotFound() {
         Mockito.when(repository.find(Mockito.anyLong())).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> service.find(Mockito.anyLong()));
     }
@@ -95,7 +92,7 @@ class TagServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1, 3, 6})
-    public void testDelete(long id) {
+    void testDelete(long id) {
         Mockito.doNothing().when(repository).delete(id);
     }
 }

@@ -4,7 +4,7 @@ import com.epam.esm.contoller.GiftCertificateController;
 import com.epam.esm.dto.GiftCertificateDTO;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
-public class CertificateLinkBuilder extends BuilderContainer<GiftCertificateDTO>{
+public class CertificateLinkBuilder extends BuilderContainer<GiftCertificateDTO> {
 
     public CertificateLinkBuilder(GiftCertificateDTO dto) {
         super(dto);

@@ -19,7 +19,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -134,7 +138,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificateDTO> findByTag(String nameOfTag, int limit, int page) {
         List<GiftCertificateEntity> listOfEntities = repository.searchByTag(nameOfTag, limit, page);
-        if(listOfEntities.isEmpty()) {
+        if (listOfEntities.isEmpty()) {
             throw new EntityNotFoundException("certificates with tag name: " + nameOfTag + " - not found");
         } else {
             return createResultList(listOfEntities);

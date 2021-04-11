@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TagsValidatorLinkTest {
 
@@ -20,7 +21,7 @@ class TagsValidatorLinkTest {
             {new TagDTO(1L, null)}};
 
     @Test
-    public void testValidation() {
+    void testValidation() {
         for (TagDTO[] param : paramsToCheck) {
             GiftCertificateDTO certificate = new GiftCertificateDTO();
             Set<TagDTO> tags = new HashSet<>(Arrays.asList(param));
@@ -30,7 +31,7 @@ class TagsValidatorLinkTest {
     }
 
     @Test
-    public void testValidationIncParams() {
+    void testValidationIncParams() {
         for (TagDTO[] param : incParamsToCheck) {
             GiftCertificateDTO certificate = new GiftCertificateDTO();
             Set<TagDTO> tags = new HashSet<>(Arrays.asList(param));

@@ -5,8 +5,8 @@ import com.epam.esm.dto.UserDTO;
 import com.epam.esm.dto.auth.AuthRequest;
 import com.epam.esm.dto.auth.AuthResponse;
 import com.epam.esm.exception.NotValidDataForAuthenticateException;
-import com.epam.esm.util.jwt.JwtProvider;
 import com.epam.esm.service.UserService;
+import com.epam.esm.util.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody AuthRequest request, HttpServletResponse response) {
-        if(request.getUsername() == null || request.getPassword() == null) {
+        if (request.getUsername() == null || request.getPassword() == null) {
             throw new NotValidDataForAuthenticateException("username or password didn't match in request");
         }
         Authentication authentication = authenticationManager

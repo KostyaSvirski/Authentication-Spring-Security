@@ -3,7 +3,8 @@ package com.epam.esm.validator.realisation.tag;
 import com.epam.esm.dto.TagDTO;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TagNameValidatorLinkTest {
 
@@ -12,7 +13,7 @@ class TagNameValidatorLinkTest {
     private String[] incParamsToCheck = {"asdfghjklpoiuytrewqasdfgvcxzxcvbnvjgyftrertyjhgfdsdfgchvfds"};
 
     @Test
-    public void testValidation() {
+    void testValidation() {
         for (String param : paramsToCheck) {
             TagDTO tag = new TagDTO();
             tag.setName(param);
@@ -21,7 +22,7 @@ class TagNameValidatorLinkTest {
     }
 
     @Test
-    public void testIncParams() {
+    void testIncParams() {
         for (String param : incParamsToCheck) {
             TagDTO tag = new TagDTO();
             tag.setName(param);

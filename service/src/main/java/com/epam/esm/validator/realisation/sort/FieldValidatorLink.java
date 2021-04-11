@@ -12,7 +12,7 @@ public class FieldValidatorLink extends IntermediateSortLink {
 
     @Override
     public boolean validate(Map<String, String> paramMap) {
-        if(paramMap.get(KEY) == null) {
+        if (paramMap.get(KEY) == null) {
             return false;
         }
         Optional<String> result = Arrays.stream(TypesOfFields.values())

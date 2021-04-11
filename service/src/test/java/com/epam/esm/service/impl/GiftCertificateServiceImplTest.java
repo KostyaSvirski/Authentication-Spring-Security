@@ -22,9 +22,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ContextConfiguration(classes = ServiceConfig.class)
 @ExtendWith(SpringExtension.class)
@@ -46,7 +53,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         GiftCertificateEntity entity = new GiftCertificateEntity();
         entity.setId(1);
         List<GiftCertificateEntity> resultList = new ArrayList<>();
@@ -60,7 +67,7 @@ class GiftCertificateServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1, 2, 3, 4, 5})
-    public void testFindSpecificCert(long id) {
+    void testFindSpecificCert(long id) {
         GiftCertificateEntity entity = new GiftCertificateEntity();
         entity.setId(id);
         Optional<GiftCertificateEntity> certWrapper = Optional.of(entity);
@@ -72,7 +79,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void testFindNotExistingCert() {
+    void testFindNotExistingCert() {
         Mockito.when(repository.find(Mockito.anyLong()))
                 .thenReturn(Optional.empty());
         Mockito.when(entityToDTOConverter.apply(Mockito.any())).thenReturn(null);
@@ -80,7 +87,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void testCreate() {
+    void testCreate() {
         GiftCertificateDTO certDTO = new GiftCertificateDTO();
         certDTO.setName("aaaa");
         certDTO.setPrice(100L);
@@ -97,7 +104,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void testUpdate() {
+    void testUpdate() {
         GiftCertificateDTO certDTO = new GiftCertificateDTO();
         certDTO.setName("aaaa");
         certDTO.setPrice(100);
@@ -107,7 +114,7 @@ class GiftCertificateServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"asc", "desc"})
-    public void testSortingMethod(String method) {
+    void testSortingMethod(String method) {
         List<GiftCertificateEntity> resultList = new ArrayList<>();
         resultList.add(new GiftCertificateEntity().builder().id(1).build());
         Mockito.when(repository.sortCertificatesByName(Mockito.eq(method), Mockito.anyInt(), Mockito.anyInt()))
@@ -120,7 +127,7 @@ class GiftCertificateServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"ask", "desk"})
-    public void testSortingIncMethod(String method) {
+    void testSortingIncMethod(String method) {
         List<GiftCertificateEntity> resultList = new ArrayList<>();
         resultList.add(new GiftCertificateEntity().builder().id(1).build());
         Mockito.when(repository.sortCertificatesByName(Mockito.eq(method), Mockito.anyInt(), Mockito.anyInt()))
@@ -133,7 +140,7 @@ class GiftCertificateServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"name_of_certificate"})
-    public void testSortingField(String field) {
+    void testSortingField(String field) {
         List<GiftCertificateEntity> resultList = new ArrayList<>();
         resultList.add(new GiftCertificateEntity().builder().id(1).build());
         Mockito.when(repository.sortCertificatesByName(Mockito.any(), Mockito.anyInt(), Mockito.anyInt()))
@@ -146,7 +153,7 @@ class GiftCertificateServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"description", "price"})
-    public void testSortingIncField(String field) {
+    void testSortingIncField(String field) {
         List<GiftCertificateEntity> resultList = new ArrayList<>();
         resultList.add(new GiftCertificateEntity().builder().id(1).build());
         Mockito.when(repository.sortCertificatesByCreateDate(Mockito.any(), Mockito.anyInt(), Mockito.anyInt()))
@@ -158,7 +165,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void testExceptionSort() {
+    void testExceptionSort() {
         Mockito.when(repository.sortCertificatesByCreateDate(Mockito.any(), Mockito.anyInt(), Mockito.anyInt()))
                 .thenThrow(new RuntimeException());
         Mockito.when(entityToDTOConverter.apply(Mockito.any())).thenReturn(new GiftCertificateDTO().builder().id(1)
@@ -169,7 +176,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void testFindByPartOfDescription() {
+    void testFindByPartOfDescription() {
         List<GiftCertificateEntity> resultList = new ArrayList<>();
         resultList.add(new GiftCertificateEntity().builder().id(1).build());
         Mockito.when(repository.searchByDescription(Mockito.any(), Mockito.anyInt(), Mockito.anyInt()))
@@ -182,7 +189,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void testFindByPartOfName() {
+    void testFindByPartOfName() {
         List<GiftCertificateEntity> resultList = new ArrayList<>();
         resultList.add(new GiftCertificateEntity().builder().id(1).build());
         Mockito.when(repository.searchByName(Mockito.any(), Mockito.anyInt(), Mockito.anyInt()))
@@ -195,7 +202,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void testFindByTagName() {
+    void testFindByTagName() {
         List<GiftCertificateEntity> resultList = new ArrayList<>();
         resultList.add(new GiftCertificateEntity().builder().id(1).build());
         Mockito.when(repository.searchByTag(Mockito.any(), Mockito.anyInt(), Mockito.anyInt()))

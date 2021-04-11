@@ -1,6 +1,6 @@
 package com.epam.esm.exception;
 
-public class PasswordIncorrectException extends RuntimeException{
+public class PasswordIncorrectException extends RuntimeException {
 
     public PasswordIncorrectException() {
     }

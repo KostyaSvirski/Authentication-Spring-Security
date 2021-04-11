@@ -12,12 +12,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
 
-    private final static String HQL_FIND_ALL = "from TagEntity order by id";
+    private static final String HQL_FIND_ALL = "from TagEntity order by id";
 
     @PersistenceContext
     private EntityManager em;

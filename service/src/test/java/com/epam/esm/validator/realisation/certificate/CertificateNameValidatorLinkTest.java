@@ -3,7 +3,8 @@ package com.epam.esm.validator.realisation.certificate;
 import com.epam.esm.dto.GiftCertificateDTO;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CertificateNameValidatorLinkTest {
 
@@ -12,8 +13,8 @@ class CertificateNameValidatorLinkTest {
     private String[] incParamsToCheck = {"asdfghjklpoiuytrewqasdfgvcxzxcvbnvjgyftrertyjhgfdsdfgchvfds"};
 
     @Test
-    public void testValidation() {
-        for(String param : paramsToCheck) {
+    void testValidation() {
+        for (String param : paramsToCheck) {
             GiftCertificateDTO certificate = new GiftCertificateDTO();
             certificate.setName(param);
             assertTrue(validator.validate(certificate));
@@ -21,8 +22,8 @@ class CertificateNameValidatorLinkTest {
     }
 
     @Test
-    public void testIncParams() {
-        for(String param : incParamsToCheck) {
+    void testIncParams() {
+        for (String param : incParamsToCheck) {
             GiftCertificateDTO certificate = new GiftCertificateDTO();
             certificate.setName(param);
             assertFalse(validator.validate(certificate));

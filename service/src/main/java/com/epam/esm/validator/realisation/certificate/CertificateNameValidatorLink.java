@@ -12,7 +12,7 @@ public class CertificateNameValidatorLink extends IntermediateCertificateLink {
 
     @Override
     public boolean validate(GiftCertificateDTO bean) {
-        if(bean.getName() == null) {
+        if (bean.getName() == null) {
             return checkNextLink(bean);
         }
         if (bean.getName().length() > 50) {

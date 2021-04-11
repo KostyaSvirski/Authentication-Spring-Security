@@ -46,7 +46,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         Mockito.when(repository.findAll(1, 1))
                 .thenReturn(Collections.singletonList(new OrderEntity().builder().id(1).build()));
         Mockito.when(entityToDTOConverter.apply(Mockito.any())).thenReturn(new OrderDTO().builder().id(1).build());
@@ -56,7 +56,7 @@ class OrderServiceImplTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1, 2, 3, 4})
-    public void testFindSpecificOrder(long id) throws EntityNotFoundException {
+    void testFindSpecificOrder(long id) throws EntityNotFoundException {
         Mockito.when(repository.find(Mockito.eq(id)))
                 .thenReturn(Optional.of(new OrderEntity().builder().id(id).build()));
         Mockito.when(entityToDTOConverter.apply(Mockito.any())).thenReturn(new OrderDTO().builder().id(1).build());
@@ -65,7 +65,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    public void testFindNotExistingSpecificOrder() throws EntityNotFoundException {
+    void testFindNotExistingSpecificOrder() throws EntityNotFoundException {
         Mockito.when(repository.find(Mockito.anyLong()))
                 .thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> service.find(0));

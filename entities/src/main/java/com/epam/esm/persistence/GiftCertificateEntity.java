@@ -69,7 +69,7 @@ public class GiftCertificateEntity {
 
     public void removeTag(TagEntity tag) {
         tagsDependsOnCertificate.remove(tag);
-        if(tag.getCertificateEntitySet().contains(this)) {
+        if (tag.getCertificateEntitySet().contains(this)) {
             tag.removeCertificate(this);
         }
     }

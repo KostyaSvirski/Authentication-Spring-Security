@@ -1,6 +1,6 @@
 package com.epam.esm.exception;
 
-public class UnknownPrincipalException extends RuntimeException{
+public class UnknownPrincipalException extends RuntimeException {
 
     public UnknownPrincipalException() {
     }

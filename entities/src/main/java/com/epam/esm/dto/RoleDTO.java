@@ -1,7 +1,6 @@
 package com.epam.esm.dto;
 
 import lombok.*;
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 

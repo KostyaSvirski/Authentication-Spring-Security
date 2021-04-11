@@ -7,10 +7,10 @@ public class IntermediateTagLink extends PreparedValidatorChain<TagDTO> {
 
     @Override
     public boolean validate(TagDTO bean) {
-        if(bean == null) {
+        if (bean == null) {
             return false;
         }
-        if(bean.getName() == null || bean.getName().isEmpty()) {
+        if (bean.getName() == null || bean.getName().isEmpty()) {
             return false;
         }
         return checkNextLink(bean);

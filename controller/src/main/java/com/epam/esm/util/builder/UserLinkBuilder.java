@@ -13,8 +13,8 @@ public class UserLinkBuilder extends BuilderContainer<UserDTO> {
 
     public UserLinkBuilder buildRetrieveSpecificUserLink() {
         hypermedia.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-                        .retrieveSpecificUser(hypermedia.getId()))
-                        .withRel("user"));
+                .retrieveSpecificUser(hypermedia.getId()))
+                .withRel("user"));
         return this;
     }
 

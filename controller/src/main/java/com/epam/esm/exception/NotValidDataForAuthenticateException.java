@@ -1,6 +1,6 @@
 package com.epam.esm.exception;
 
-public class NotValidDataForAuthenticateException extends RuntimeException{
+public class NotValidDataForAuthenticateException extends RuntimeException {
 
     public NotValidDataForAuthenticateException() {
     }

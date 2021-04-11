@@ -1,7 +1,6 @@
 package com.epam.esm.hibernate.impl;
 
 import com.epam.esm.config.ConfigDB;
-import com.epam.esm.exception.DaoException;
 import com.epam.esm.hibernate.OrderRepository;
 import com.epam.esm.persistence.OrderEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +38,7 @@ class OrderRepositoryImplTest {
     }
 
     @Test
-    public void testInsert() {
+    void testInsert() {
         OrderEntity order = new OrderEntity();
         order.setIdUser(1);
         order.setIdCertificate(1);
@@ -50,7 +49,7 @@ class OrderRepositoryImplTest {
     }
 
     @Test
-    public void findOrder() {
+    void findOrder() {
         OrderEntity order = new OrderEntity();
         order.setIdUser(1);
         order.setIdCertificate(1);
@@ -63,13 +62,13 @@ class OrderRepositoryImplTest {
     }
 
     @Test
-    public void findNotExistOrder() {
+    void findNotExistOrder() {
         Optional<OrderEntity> entity = repository.find(0);
         assertFalse(entity.isPresent());
     }
 
     @Test
-    public void findOrders() {
+    void findOrders() {
         List<OrderEntity> entities = repository.findAll(10, 3);
         assertNotNull(entities);
         assertEquals(10, entities.size());
@@ -78,7 +77,7 @@ class OrderRepositoryImplTest {
     }
 
     @Test
-    public void findOrdersOfSpecificUser() {
+    void findOrdersOfSpecificUser() {
         int expectedIdUser = 3;
         OrderEntity order = new OrderEntity();
         order.setIdUser(expectedIdUser);
@@ -93,7 +92,7 @@ class OrderRepositoryImplTest {
     }
 
     @Test
-    public void findOrderOfSpecificUser() {
+    void findOrderOfSpecificUser() {
         int expectedIdUser = 3;
         OrderEntity order = new OrderEntity();
         order.setIdUser(expectedIdUser);

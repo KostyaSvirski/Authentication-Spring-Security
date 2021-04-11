@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FieldValidatorLinkTest {
 
@@ -14,7 +15,7 @@ class FieldValidatorLinkTest {
     private String[] incParamsToCheck = {"", null, "asdfda"};
 
     @Test
-    public void testValidation() {
+    void testValidation() {
         for (String param : paramsToCheck) {
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("field", param);
@@ -23,7 +24,7 @@ class FieldValidatorLinkTest {
     }
 
     @Test
-    public void testValidationIncParams() {
+    void testValidationIncParams() {
         for (String param : incParamsToCheck) {
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("field", param);

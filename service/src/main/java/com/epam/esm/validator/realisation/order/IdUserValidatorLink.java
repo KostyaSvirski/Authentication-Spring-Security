@@ -7,7 +7,7 @@ public class IdUserValidatorLink extends IntermediateOrderLink {
 
     @Override
     public boolean validate(OrderDTO bean) {
-        if(bean.getIdUser() <= 0) {
+        if (bean.getIdUser() <= 0) {
             return false;
         }
         return checkNextLink(bean);
