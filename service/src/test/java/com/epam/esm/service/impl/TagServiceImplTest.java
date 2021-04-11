@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.hibernate.TagRepository;
 import com.epam.esm.hibernate.impl.TagRepositoryImpl;
 import com.epam.esm.config.ServiceConfig;
@@ -20,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,8 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ContextConfiguration(classes = ServiceConfig.class)
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+@ExtendWith(SpringExtension.class)
+@SpringJUnitConfig
 class TagServiceImplTest {
 
     @Mock
@@ -86,8 +89,7 @@ class TagServiceImplTest {
     @Test
     public void testFindSpecificTagNotFound() {
         Mockito.when(repository.find(Mockito.anyLong())).thenReturn(Optional.empty());
-        Optional<TagDTO> actual = Optional.ofNullable(service.find(Mockito.anyLong()));
-        assertEquals(Optional.empty(), actual);
+        assertThrows(EntityNotFoundException.class, () -> service.find(Mockito.anyLong()));
     }
 
 

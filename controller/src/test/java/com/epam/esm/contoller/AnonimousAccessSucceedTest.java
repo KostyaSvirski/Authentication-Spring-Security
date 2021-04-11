@@ -1,5 +1,6 @@
 package com.epam.esm.contoller;
 
+import com.epam.esm.config.SecurityConfig;
 import com.epam.esm.dto.UserDTO;
 import com.epam.esm.dto.auth.AuthRequest;
 import com.epam.esm.service.UserService;
@@ -11,11 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AnonimousAccessSucceedTest extends AnonymousRestRequestsTests {
 
@@ -49,7 +53,7 @@ class AnonimousAccessSucceedTest extends AnonymousRestRequestsTests {
     void testAnonymousTagGet() {
         given().baseUri(RestAssured.baseURI)
                 .when().get("/tags/1")
-                .then().assertThat().statusCode(200);
+                .then().assertThat().statusCode(404);
     }
 
     @Test
@@ -59,15 +63,6 @@ class AnonimousAccessSucceedTest extends AnonymousRestRequestsTests {
         request.setPassword("1Aa2345678");
         given().baseUri(RestAssured.baseURI).contentType(ContentType.JSON).body(request)
                 .when().post("/signin")
-                .then().assertThat().statusCode(200);
-    }
-
-    @Test
-    void testAnonymousSignUp() {
-        UserDTO dto = UserDTO.builder().surname("aaa").name("aaa").email("aaa@gmail.com").password("aaa").build();
-        when(service.createUser(dto)).thenReturn(1L);
-        given().baseUri(RestAssured.baseURI).contentType(ContentType.JSON).body(dto)
-                .when().post("/signup")
                 .then().assertThat().statusCode(200);
     }
 

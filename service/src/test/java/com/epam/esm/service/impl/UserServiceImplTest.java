@@ -1,15 +1,11 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.hibernate.OrderRepository;
-import com.epam.esm.hibernate.UserRepository;
-import com.epam.esm.hibernate.impl.OrderRepositoryImpl;
-import com.epam.esm.hibernate.impl.UserRepositoryImpl;
 import com.epam.esm.config.ServiceConfig;
-import com.epam.esm.converter.OrderEntityToOrderDTOConverter;
 import com.epam.esm.converter.UserEntityToUserDTOConverter;
-import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.UserDTO;
-import com.epam.esm.persistence.OrderEntity;
+import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.hibernate.UserRepository;
+import com.epam.esm.hibernate.impl.UserRepositoryImpl;
 import com.epam.esm.persistence.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,15 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class UserServiceImplTest {
 
     @Mock
-    private final OrderRepository orderRepository = Mockito.mock(OrderRepositoryImpl.class);
-    @Mock
     private final UserRepository userRepository = Mockito.mock(UserRepositoryImpl.class);
     @Mock
     private final UserEntityToUserDTOConverter toUserDTOConverter =
             Mockito.mock(UserEntityToUserDTOConverter.class);
-    @Mock
-    private final OrderEntityToOrderDTOConverter toOrderDTOConverter =
-            Mockito.mock(OrderEntityToOrderDTOConverter.class);
     @InjectMocks
     private UserServiceImpl service;
 
@@ -83,31 +74,7 @@ class UserServiceImplTest {
     @Test
     public void testFindSpecificUserNotFound() {
         Mockito.when(userRepository.find(Mockito.anyLong())).thenReturn(Optional.empty());
-        Optional<UserDTO> actual = Optional.ofNullable(service.find(Mockito.anyLong()));
-        assertEquals(Optional.empty(), actual);
+        assertThrows(EntityNotFoundException.class, () -> service.find(Mockito.anyLong()));
     }
-
-   /* @ParameterizedTest
-    @ValueSource(longs = {1, 2, 3, 4})
-    public void testFindOrdersOfUser(long id) {
-        OrderDTO dto = new OrderDTO();
-        dto.setIdUser(id);
-        OrderEntity entity = new OrderEntity();
-        entity.setIdUser(id);
-        Mockito.when(toOrderDTOConverter.apply(Mockito.any())).thenReturn(dto);
-        Mockito.when(orderRepository.findOrdersOfSpecificUser(id, 1, 1))
-                .thenReturn(Collections.singletonList(entity));
-        List<OrderDTO> actual = service.findOrdersOfUser(id, 1, 1);
-        assertEquals(Collections.singletonList(dto), actual);
-    }
-
-    @Test
-    public void testFindSpecificOrderOfUser() {
-        Mockito.when(orderRepository.findOrderOfSpecificUser(Mockito.anyLong(), Mockito.anyLong()))
-                .thenReturn(Collections.singletonList(new OrderEntity()));
-        Mockito.when(toOrderDTOConverter.apply(Mockito.any())).thenReturn(new OrderDTO());
-        Optional<OrderDTO> actual = service.findSpecificOrderOfUser(Mockito.anyLong(), Mockito.anyLong());
-        assertEquals(Optional.of(new OrderDTO()), actual);
-    }*/
 
 }

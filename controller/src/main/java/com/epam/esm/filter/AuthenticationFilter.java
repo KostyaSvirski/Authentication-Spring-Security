@@ -30,7 +30,7 @@ import java.util.List;
 @PropertySource("classpath:/controller.properties")
 public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private final static String AUTHORIZATION_KEY = "Authorization";
+    private static final String AUTHORIZATION_KEY = "uthorization";
     private static final String PREFIX_BEARER = "Bearer ";
     private static final String PATTERN_CERTIFICATES = "/certificates/**";
     private static final String PATTERN_TAGS = "/tags/**";

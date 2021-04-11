@@ -1,28 +1,22 @@
 package com.epam.esm.util.jwt;
 
-import com.epam.esm.config.SecurityConfig;
 import com.epam.esm.dto.RoleDTO;
 import com.epam.esm.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {SecurityConfig.class}, loader = AnnotationConfigContextLoader.class)
 class JwtProviderTest {
 
-    @Autowired
-    private PasswordEncoder encoder;
-    @Autowired
-    private JwtProvider provider;
+    private PasswordEncoder encoder = new BCryptPasswordEncoder();
+    private JwtProvider provider = new JwtProvider();
 
     @Test
     void generateToken() {

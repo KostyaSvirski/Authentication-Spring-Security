@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class FieldValidatorLinkTest {
 
     private FieldValidatorLink validator = new FieldValidatorLink();
-    private String[] paramsToCheck = {"gift_certificate.name", "create_date"};
+    private String[] paramsToCheck = {"name_of_certificate", "create_date"};
     private String[] incParamsToCheck = {"", null, "asdfda"};
 
     @Test
