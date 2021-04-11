@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id "org.sonarqube" version "3.1.1"
     id 'war'
-    id 'jacoco'
 }
 
 version 'unspecified'
@@ -20,8 +19,6 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.9.RELEASE'
     implementation group: 'org.sonarsource.scanner.gradle', name: 'sonarqube-gradle-plugin', version: '3.1.1'
     providedRuntime group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.3.9.RELEASE'
-    implementation group: 'org.kordamp.gradle', name: 'jacoco-gradle-plugin', version: '0.44.0'
-
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -36,39 +33,5 @@ test {
 sonarqube {
     properties {
         property "sonar.login", "de2de76be9f0ad48341d5f59be48ef4193d8f4b4"
-    }
-}
-
-jacoco {
-    toolVersion = "0.8.6"
-}
-
-jacocoTestReport {
-    reports {
-        html.enabled true
-        xml.enabled true
-        csv.enabled true
-    }
-}
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.5
-            }
-        }
-
-        rule {
-            enabled = false
-            element = 'CLASS'
-            includes = ['org.gradle.*']
-
-            limit {
-                counter = 'LINE'
-                value = 'TOTALCOUNT'
-                maximum = 0.3
-            }
-        }
     }
 }
