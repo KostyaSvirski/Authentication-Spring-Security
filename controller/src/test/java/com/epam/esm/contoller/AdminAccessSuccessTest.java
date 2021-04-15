@@ -10,48 +10,44 @@ import static io.restassured.RestAssured.given;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserAccessDeniedTest extends UserRestRequestTests {
+class AdminAccessSuccessTest extends AdminRestRequestsTests {
 
     @Test
-    void testUserCertificatesPost() {
+    void accessToReadOrders() {
         given().baseUri(RestAssured.baseURI).header("Authorization", getToken())
-                .when().post("/certificates/")
-                .then().assertThat().statusCode(403);
-    }
-
-    @Test
-    void testUserTagsPost() {
-        given().baseUri(RestAssured.baseURI).header("Authorization", getToken())
-                .when().post("/tags/")
-                .then().assertThat().statusCode(403);
-    }
-
-    @Test
-    void testUserUsersGet() {
-        given().baseUri(RestAssured.baseURI).header("Authorization", getToken())
-                .when().get("/users/")
-                .then().assertThat().statusCode(403);
-    }
-
-    @Test
-    void testUserUserGet() {
-        given().baseUri(RestAssured.baseURI).header("Authorization", getToken())
-                .when().get("/users/1")
-                .then().assertThat().statusCode(403);
-    }
-
-    @Test
-    void testUserOrdersGet() {
-        given().baseUri(RestAssured.baseURI).header("Authorization", getToken())
-                .when().get("/orders/")
+                .when().get("orders/")
                 .then().assertThat().statusCode(200);
     }
 
     @Test
-    void testUserOrderGet() {
+    void accessToReadSpecificOrder() {
         given().baseUri(RestAssured.baseURI).header("Authorization", getToken())
-                .when().get("/orders/1")
+                .when().get("orders/1")
                 .then().assertThat().statusCode(200);
     }
+
+    @Test
+    void accessToReadUsers() {
+        given().baseUri(RestAssured.baseURI).header("Authorization", getToken())
+                .when().get("users/")
+                .then().assertThat().statusCode(200);
+    }
+
+    @Test
+    void accessToReadUser() {
+        given().baseUri(RestAssured.baseURI).header("Authorization", getToken())
+                .when().get("users/1")
+                .then().assertThat().statusCode(200);
+    }
+
+    @Test
+    void accessToReadMeUser() {
+        given().baseUri(RestAssured.baseURI).header("Authorization", getToken())
+                .when().get("users/me")
+                .then().assertThat().statusCode(200);
+    }
+
+
+
 
 }
