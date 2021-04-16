@@ -37,12 +37,11 @@ public class CertificateRepositoryImpl implements CertificateRepository {
 
     @Override
     public List<GiftCertificateEntity> findAll(int limit, int page) {
-        return em.createQuery(HQL_RETRIEVE_ALL + HQL_ORDER_BY_ID)
+        return em.createQuery(HQL_RETRIEVE_ALL + HQL_ORDER_BY_ID, GiftCertificateEntity.class)
                 .setFirstResult((page - 1) * limit)
                 .setMaxResults(limit)
                 .getResultList();
     }
-
 
     @Override
     public long create(GiftCertificateEntity entity) {

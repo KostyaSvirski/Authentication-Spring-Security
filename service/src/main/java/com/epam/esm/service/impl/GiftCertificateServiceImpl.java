@@ -50,7 +50,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateDTO find(long id) throws EntityNotFoundException {
         Optional<GiftCertificateEntity> certificateFromDao = repository.find(id);
-        if (!certificateFromDao.isPresent()) {
+        if (certificateFromDao.isEmpty()) {
             throw new EntityNotFoundException("certificate with id " + id + " not found");
         }
         return converterToDto.apply(certificateFromDao.get());

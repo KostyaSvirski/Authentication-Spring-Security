@@ -1,6 +1,5 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.config.ServiceConfig;
 import com.epam.esm.converter.TagDTOToTagEntityConverter;
 import com.epam.esm.converter.TagEntityToTagDTOConverter;
 import com.epam.esm.dto.TagDTO;
@@ -8,7 +7,6 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.hibernate.TagRepository;
 import com.epam.esm.hibernate.impl.TagRepositoryImpl;
 import com.epam.esm.persistence.TagEntity;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,21 +14,16 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-@ContextConfiguration(classes = ServiceConfig.class)
-@ExtendWith(SpringExtension.class)
-@SpringJUnitConfig
+
+@ExtendWith(MockitoExtension.class)
 class TagServiceImplTest {
 
     @Mock
@@ -42,16 +35,11 @@ class TagServiceImplTest {
     @InjectMocks
     private TagServiceImpl service;
 
-    @BeforeEach
-    public void init() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @ParameterizedTest
     @ValueSource(longs = {1, 2, 3, 4})
     void testCreate(long id) {
         TagDTO tag = new TagDTO(id, "gg");
-        Mockito.when(converterToEntity.apply(tag)).thenReturn(new TagEntity().builder().id(id).build());
+        Mockito.when(converterToEntity.apply(tag)).thenReturn(TagEntity.builder().id(id).build());
         Mockito.when(repository.create(Mockito.any())).thenReturn(id);
         long actual = service.create(tag);
         assertEquals(id, actual);
@@ -60,7 +48,7 @@ class TagServiceImplTest {
     @Test
     void testFindAll() {
         Mockito.when(repository.findAll(Mockito.anyInt(), Mockito.anyInt()))
-                .thenReturn(Collections.singletonList(new TagEntity().builder().id(1).build()));
+                .thenReturn(Collections.singletonList(TagEntity.builder().id(1).build()));
         Mockito.when(converterToDTO.apply(Mockito.any())).thenReturn(new TagDTO());
         List<TagDTO> actual = service.findAll(Mockito.anyInt(), Mockito.anyInt());
         assertEquals(Collections.singletonList(new TagDTO()), actual);
@@ -77,10 +65,10 @@ class TagServiceImplTest {
     @ValueSource(longs = {1, 2, 3, 4})
     void testFindSpecificTag(long id) {
         Mockito.when(repository.find(Mockito.eq(id)))
-                .thenReturn(Optional.of(new TagEntity().builder().id(id).build()));
-        Mockito.when(converterToDTO.apply(Mockito.any())).thenReturn(new TagDTO().builder().id(id).build());
+                .thenReturn(Optional.of(TagEntity.builder().id(id).build()));
+        Mockito.when(converterToDTO.apply(Mockito.any())).thenReturn(TagDTO.builder().id(id).build());
         Optional<TagDTO> actual = Optional.ofNullable(service.find(id));
-        assertEquals(Optional.of(new TagDTO().builder().id(id).build()), actual);
+        assertEquals(Optional.of(TagDTO.builder().id(id).build()), actual);
     }
 
     @Test
@@ -93,6 +81,9 @@ class TagServiceImplTest {
     @ParameterizedTest
     @ValueSource(longs = {1, 3, 6})
     void testDelete(long id) {
+        Mockito.when(repository.find(Mockito.anyLong())).thenReturn(Optional.of(TagEntity.builder().id(id).build()));
         Mockito.doNothing().when(repository).delete(id);
+        service.delete(id);
+        assertTrue(true);
     }
 }
